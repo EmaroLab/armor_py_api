@@ -1,4 +1,4 @@
-# pyarmor_client_lib
+# pyarmor
 A python client library for armor.
 
 Allows users to easily call ARMOR service from Python code. 
