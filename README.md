@@ -3,7 +3,7 @@ A python client library for armor.
 
 Allows users to easily call ARMOR service from Python code. 
 
-ROS service calls are hidden in utility functions whose structure is similar to that of OWLAPI or OWLAPI helper functions, thus hiding completely the fact that the fact that the ontology is remotely managed by ARMOR instead of your node itself. It also include several macros to perform complex manipulations on ARMOR refences (manipulations that require a more than a single call to ARMOR such has replacing a specific data property value associated to specific individual).
+ROS service calls are hidden in utility functions whose structure is similar to that of OWLAPI or OWLAPI helper functions, thus hiding completely the fact that the fact that the ontology is remotely managed by ARMOR instead of your node itself. It also include several macros to perform complex manipulations on ARMOR references (manipulations that require a more than a single call to ARMOR such has replacing a specific data property value associated to specific individual).
 
 More functions are coming soon as their needed.
 
