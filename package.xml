@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>pyarmor_client_lib</name>
+  <name>pyarmor</name>
   <version>0.1.0</version>
   <description>Pyarmor- a python interface for armor clients</description>
 
