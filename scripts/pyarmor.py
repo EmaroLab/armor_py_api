@@ -13,15 +13,42 @@ class TerminalColors:
 
 # =========================================     UTILITY     ========================================= #
 
+
 def apply_buffered_changes(client_id, reference_name):
-	try:
-		apply_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-		res = apply_call(client_id, reference_name, 'APPLY', '', '', [])
-		return res.success
-        rospy.loginfo(TerminalColors.OKGREEN + "Buffered manipulations to " + reference_name + " applied." + TerminalColors.ENDC)
-	except rospy.ServiceException, e:
-		rospy.logerr("Armor service internal error. Buffered changes have not been applied.")
-		return False 
+    try:
+        apply_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
+        res = apply_call(client_id, reference_name, 'APPLY', '', '', [])
+        rospy.loginfo("%sBuffered manipulations to %s applied.%s",
+                      TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
+        return res.success and res.is_consistent
+    except rospy.ServiceException, e:
+        rospy.logerr("Armor service internal error. Buffered changes have not been applied. Exception: %s", e)
+        return False
+
+
+def sync_buffered_reasoner(client_id, reference_name):
+    try:
+        sync_call = rospy.ServiceProxy('armore_interface_srv', ArmorDirective)
+        res = sync_call(client_id, reference_name, 'REASON', '', '', [])
+        rospy.loginfo("%sReasoner synced on %s applied.%s",
+                      TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
+        return res.success and res.is_consistent
+    except rospy.ServiceException, e:
+        rospy.logerr("Armor service internal error. Buffered reasoner could not be synced. Exception: %s", e)
+        return False
+
+
+def save_ref_with_inferences(client_id, reference_name, filepath):
+    try:
+        save_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
+        res = save_call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
+        rospy.loginfo("%sReference %s saved to %s.%s",
+                      TerminalColors.OKGREEN, reference_name, filepath, TerminalColors.ENDC)
+        return res.success
+    except rospy.ServiceException, e:
+        rospy.logerr("Armor service internal error. Cannot save reference %s to %s. Exception: %s",
+                     reference_name, filepath, e)
+        return False
 
 
 def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
@@ -31,7 +58,7 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
         load_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
         if mounted:
             res = load_call(client_id, reference_name, 'LOAD', 'FILE', 'MOUNTED',
-                [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+                            [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
             if res.success is False:
                 rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
         else:
@@ -53,10 +80,11 @@ def mount_on_ref(client_id, reference_name):
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
         else:
+            rospy.loginfo("%s%s mounted on %s.%s", TerminalColors.WARNING, client_id, reference_name, TerminalColors.ENDC)
             return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed upon mounting %s on reference %s: %s", client_id, reference_name, e)
-        return False
+        return None
 
 
 def unmount_from_ref(client_id, reference_name):
@@ -66,6 +94,10 @@ def unmount_from_ref(client_id, reference_name):
         res = mount_call(client_id, reference_name, 'UNMOUNT', '', '', [])
         if res.success is False:
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
+            return False
+        else:
+            rospy.loginfo("%s%s unmounted from %s.%s", TerminalColors.WARNING, client_id, reference_name, TerminalColors.ENDC)
+            return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed while unmounting %s from reference %s: %s", client_id, reference_name, e)
         return None
@@ -104,7 +136,7 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
     try:
         add_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
         res = add_call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
-                                [dataprop_name, ind_name, value_type, value])
+                       [dataprop_name, ind_name, value_type, value])
         return res
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed upon adding property %s to individual %s: %s", dataprop_name, ind_name, e)
@@ -157,7 +189,7 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
                 res = add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, value_type, new_value)
             else:
                 res = replace_dataprop_b2_ind(
-                        client_id, reference_name, dataprop_name, ind_name, value_type, new_value, old_value)
+                    client_id, reference_name, dataprop_name, ind_name, value_type, new_value, old_value)
             return res
         except AssertionError, e:
             rospy.logerr("%s: You are trying to replace a single value of %s belonging to %s"
