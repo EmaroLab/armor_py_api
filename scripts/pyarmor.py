@@ -1,6 +1,7 @@
 from armor_msgs.srv import ArmorDirective
 import rospy
 
+
 class TerminalColors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -28,7 +29,7 @@ def apply_buffered_changes(client_id, reference_name):
 
 def sync_buffered_reasoner(client_id, reference_name):
     try:
-        sync_call = rospy.ServiceProxy('armore_interface_srv', ArmorDirective)
+        sync_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
         res = sync_call(client_id, reference_name, 'REASON', '', '', [])
         rospy.loginfo("%sReasoner synced on %s applied.%s",
                       TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
