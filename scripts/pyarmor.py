@@ -12,13 +12,18 @@ class TerminalColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+# =========================================     CLIENT      ========================================= #
+
+rospy.wait_for_service('armor_interface_srv')
+armor_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
+
 # =========================================     UTILITY     ========================================= #
 
 
 def apply_buffered_changes(client_id, reference_name):
+    rospy.wait_for_service('armor_interface_srv')
     try:
-        apply_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = apply_call(client_id, reference_name, 'APPLY', '', '', [])
+        res = armor_call(client_id, reference_name, 'APPLY', '', '', [])
         rospy.loginfo("%sBuffered manipulations to %s applied.%s",
                       TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
         return res.success and res.is_consistent
@@ -28,9 +33,9 @@ def apply_buffered_changes(client_id, reference_name):
 
 
 def sync_buffered_reasoner(client_id, reference_name):
+    rospy.wait_for_service('armor_interface_srv')
     try:
-        sync_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = sync_call(client_id, reference_name, 'REASON', '', '', [])
+        res = armor_call(client_id, reference_name, 'REASON', '', '', [])
         rospy.loginfo("%sReasoner synced on %s applied.%s",
                       TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
         return res.success and res.is_consistent
@@ -40,9 +45,9 @@ def sync_buffered_reasoner(client_id, reference_name):
 
 
 def save_ref_with_inferences(client_id, reference_name, filepath):
+    rospy.wait_for_service('armor_interface_srv')
     try:
-        save_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = save_call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
+        res = armor_call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
         rospy.loginfo("%sReference %s saved to %s.%s",
                       TerminalColors.OKGREEN, reference_name, filepath, TerminalColors.ENDC)
         return res.success
@@ -56,15 +61,15 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
                        buffered_manipulation=False, reasoner="PELLET", buffered_reasoner=False, mounted=False):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        load_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
         if mounted:
-            res = load_call(client_id, reference_name, 'LOAD', 'FILE', 'MOUNTED',
-                            [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+            res = armor_call(client_id, reference_name, 'LOAD', 'FILE', 'MOUNTED',
+                             [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
             if res.success is False:
                 rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
         else:
-            res = load_call(client_id, reference_name, 'LOAD', 'FILE', '',
-                            [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+            res = armor_call(client_id, reference_name, 'LOAD', 'FILE', '',
+                             [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+
             if res.success is False:
                 rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
     except rospy.ServiceException, e:
@@ -75,8 +80,7 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
 def mount_on_ref(client_id, reference_name):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        mount_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = mount_call(client_id, reference_name, 'MOUNT', '', '', [])
+        res = armor_call(client_id, reference_name, 'MOUNT', '', '', [])
         if res.success is False:
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
@@ -91,8 +95,7 @@ def mount_on_ref(client_id, reference_name):
 def unmount_from_ref(client_id, reference_name):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        mount_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = mount_call(client_id, reference_name, 'UNMOUNT', '', '', [])
+        res = armor_call(client_id, reference_name, 'UNMOUNT', '', '', [])
         if res.success is False:
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
@@ -103,15 +106,54 @@ def unmount_from_ref(client_id, reference_name):
         rospy.logwarn("Service call failed while unmounting %s from reference %s: %s", client_id, reference_name, e)
         return None
 
+
+def set_log_to_terminal(switch):
+    rospy.wait_for_service('armor_interface_srv')
+    try:
+        if switch:
+            res = armor_call('', '', 'LOG', 'SCREEN', 'ON', [])
+        else:
+            res = armor_call('', '', 'LOG', 'SCREEN', 'OFF', [])
+        if res.success is False:
+            rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
+            return False
+        else:
+            rospy.loginfo("%sToggled log to terminal.%s", TerminalColors.WARNING, TerminalColors.ENDC)
+            return True
+    except rospy.ServiceException, e:
+        rospy.logwarn("Service call failed while toggling logger to terminal: %s", e)
+        return None
+
+
+def set_log_to_file(switch, filepath=''):
+    rospy.wait_for_service('armor_interface_srv')
+    try:
+        if switch:
+            if filepath != '':
+                res = armor_call('', '', 'LOG', 'FILE', 'ON', [filepath])
+            else:
+                rospy.logerr("PYARMOR ERROR: "
+                             "please select a filepath to log to when you toggle on ARMOR logging to file.")
+                return None
+        else:
+            res = armor_call('', '', 'LOG', 'FILE', 'OFF', [])
+        if res.success is False:
+            rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
+            return False
+        else:
+            rospy.loginfo("%sToggled log to file: %s.%s", TerminalColors.WARNING, filepath, TerminalColors.ENDC)
+            return True
+    except rospy.ServiceException, e:
+        rospy.logwarn("Service call failed while toggling log to file: %s", e)
+        return None
+
 # =========================================  MANIPULATIONS  ========================================= #
 
 
 def add_ind_to_class(client_id, reference_name, ind_name, class_name):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        update_shape_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = update_shape_call(client_id, reference_name, 'ADD', 'IND', 'CLASS',
-                                [ind_name, class_name])
+        res = armor_call(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
         if res.success is False:
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
         return res
@@ -123,9 +165,8 @@ def add_ind_to_class(client_id, reference_name, ind_name, class_name):
 def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, value_obj_name):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        add_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = add_call(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
-                       [objectprop_name, ind_name, value_obj_name])
+        res = armor_call(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
+                         [objectprop_name, ind_name, value_obj_name])
         return res
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed upon adding property %s to individual %s: %s", objectprop_name, ind_name, e)
@@ -135,8 +176,7 @@ def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, 
 def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, value_type, value):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        add_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = add_call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
+        res = armor_call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
                        [dataprop_name, ind_name, value_type, value])
         return res
     except rospy.ServiceException, e:
@@ -147,8 +187,7 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
 def replace_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, new_value, old_value):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        replace_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = replace_call(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
+        res = armor_call(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
                            [objectprop_name, ind_name, new_value, old_value])
         return res
     except rospy.ServiceException, e:
@@ -159,8 +198,7 @@ def replace_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_na
 def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, value_type, new_value, old_value):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        replace_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = replace_call(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
+        res = armor_call(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
                            [dataprop_name, ind_name, value_type, new_value, old_value])
         return res
     except rospy.ServiceException, e:
@@ -181,6 +219,7 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
     :param new_value:
     :return:
     """
+    rospy.wait_for_service('armor_interface_srv')
     query = query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name)
     if query is not None:
         try:
@@ -203,14 +242,40 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
 
 # =========================================      QUERY      ========================================= #
 
+def query_ind_b2_class(client_id, reference_name, ind_name, class_name):
+    rospy.wait_for_service('armor_interface_srv')
+    try:
+        res = armor_call(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [ind_name, class_name])
+        return res
+    except rospy.ServiceException, e:
+        rospy.logwarn("Service call failed upon querying individual %s belonging to class %s: %s",
+                      ind_name, class_name, e)
+        return None
+
 
 def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
     rospy.wait_for_service('armor_interface_srv')
     try:
-        update_shape_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
-        res = update_shape_call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND',
-                                [dataprop_name, ind_name])
+        res = armor_call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
         return res
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed upon querying property %s to individual %s: %s", dataprop_name, ind_name, e)
+        return None
+
+
+def check_ind_exists(client_id, reference_name, ind_name):
+    """
+    Utility function to check an arbitrary named individual exists.
+    WARNING: Returns the first individual returned by the query (if more than one is found)
+    Else, it return None
+    :param client_id:
+    :param reference_name:
+    :param ind_name:
+    :return:
+    """
+    rospy.wait_for_service('armor_interface_srv')
+    query = query_ind_b2_class(client_id, reference_name, ind_name, 'Thing')
+    if len(query.queried_objects) != 0:
+        return query.queried_objects[0]
+    else:
         return None
