@@ -2,7 +2,7 @@ from armor_msgs.srv import ArmorDirective
 import rospy
 
 
-class TerminalColors:
+class __TerminalColors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -12,49 +12,112 @@ class TerminalColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
+class ArmorServiceCallError(Exception):
+    def __init__(self, message):
+        self.msg = message
+        super(ArmorServiceCallError, self).__init__(self.msg)
+
+
+class ArmorServiceInternalError(Exception):
+    def __init__(self, message, exit_code):
+        self.msg = message
+        self.code = exit_code
+        err_msg = "ARMOR internal error %s: %s" % (self.code, self.msg)
+        super(ArmorServiceInternalError, self).__init__(err_msg)
+
 # =========================================     CLIENT      ========================================= #
 
-rospy.wait_for_service('armor_interface_srv')
 armor_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
 
 # =========================================     UTILITY     ========================================= #
 
 
 def apply_buffered_changes(client_id, reference_name):
+    """
+    Apply buffered manipulations to the ontology when its reference has been initialized in buffered manipulation mode
+    Args:
+        client_id (str):
+        reference_name (str):
+    Returns:
+        bool: True if ontology is consistent, False otherwise
+    Raises:
+        ArmorServiceCallError: if call to ARMOR fails
+        ArmorServiceInternalError: if ARMOR reports an internal error
+    Note:
+        It returns the boolean consistency state of the ontology. This value is not updated if you are working in
+        buffered reasoner mode!
+    """
     rospy.wait_for_service('armor_interface_srv')
     try:
         res = armor_call(client_id, reference_name, 'APPLY', '', '', [])
         rospy.loginfo("%sBuffered manipulations to %s applied.%s",
-                      TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
-        return res.success and res.is_consistent
+                      __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
-        rospy.logerr("Armor service internal error. Buffered changes have not been applied. Exception: %s", e)
-        return False
+        err_msg = "Armor service internal error. Buffered changes have not been applied. Exception: %s" % e
+        rospy.logerr(err_msg)
+        raise ArmorServiceCallError(err_msg)
+    if res.success:
+        return res.is_consistent
+    else:
+        rospy.logwarn(res.error_description)
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def sync_buffered_reasoner(client_id, reference_name):
+    """
+    Sync ontology reference reasoner when operating in buffered reasoner mode
+    Args:
+        client_id (str):
+        reference_name (str):
+    Returns:
+        bool: True if ontology is consistent, False otherwise
+    Raises:
+        ArmorServiceCallError: if call to ARMOR fails
+        ArmorServiceInternalError: if ARMOR reports an internal error
+    """
     rospy.wait_for_service('armor_interface_srv')
     try:
         res = armor_call(client_id, reference_name, 'REASON', '', '', [])
         rospy.loginfo("%sReasoner synced on %s applied.%s",
-                      TerminalColors.OKGREEN, reference_name, TerminalColors.ENDC)
-        return res.success and res.is_consistent
+                      __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
-        rospy.logerr("Armor service internal error. Buffered reasoner could not be synced. Exception: %s", e)
-        return False
+        err_msg = "Armor service internal error. Buffered reasoner could not be synced. Exception: %s" % e
+        rospy.logerr(err_msg)
+        raise ArmorServiceCallError(err_msg)
+    if res.success:
+        return res.is_consistent
+    else:
+        rospy.logwarn(res.error_description)
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def save_ref_with_inferences(client_id, reference_name, filepath):
+    """
+    Save ontology with latest inferred axioms to specified filepath
+    Args:
+        client_id (str):
+        reference_name (str):
+        filepath (str):
+    Returns:
+        None:
+    Raises:
+        ArmorServiceCallError: if call to ARMOR fails
+        ArmorServiceInternalError: if ARMOR reports an internal error
+    """
     rospy.wait_for_service('armor_interface_srv')
     try:
         res = armor_call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
         rospy.loginfo("%sReference %s saved to %s.%s",
-                      TerminalColors.OKGREEN, reference_name, filepath, TerminalColors.ENDC)
-        return res.success
+                      __TerminalColors.OKGREEN, reference_name, filepath, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
-        rospy.logerr("Armor service internal error. Cannot save reference %s to %s. Exception: %s",
-                     reference_name, filepath, e)
-        return False
+        err_msg = "Armor service internal error. Cannot save reference %s to %s." % \
+                  reference_name, filepath
+        rospy.logerr(err_msg)
+        raise ArmorServiceCallError(err_msg)
+    if not res.success:
+        rospy.logwarn(res.error_description)
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
@@ -73,8 +136,9 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
             if res.success is False:
                 rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
     except rospy.ServiceException, e:
-        rospy.logwarn("Service call failed upon creating reference %s: %s", reference_name, e)
-        return None
+        err_msgs = "Service call failed upon reference %s from %s" % (reference_name, client_id)
+        rospy.logwarn(err_msgs)
+        raise ArmorServiceCallError(err_msgs, e)
 
 
 def mount_on_ref(client_id, reference_name):
@@ -85,7 +149,7 @@ def mount_on_ref(client_id, reference_name):
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
         else:
-            rospy.loginfo("%s%s mounted on %s.%s", TerminalColors.WARNING, client_id, reference_name, TerminalColors.ENDC)
+            rospy.loginfo("%s%s mounted on %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
             return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed upon mounting %s on reference %s: %s", client_id, reference_name, e)
@@ -100,7 +164,7 @@ def unmount_from_ref(client_id, reference_name):
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
         else:
-            rospy.loginfo("%s%s unmounted from %s.%s", TerminalColors.WARNING, client_id, reference_name, TerminalColors.ENDC)
+            rospy.loginfo("%s%s unmounted from %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
             return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed while unmounting %s from reference %s: %s", client_id, reference_name, e)
@@ -118,7 +182,7 @@ def set_log_to_terminal(switch):
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
         else:
-            rospy.loginfo("%sToggled log to terminal.%s", TerminalColors.WARNING, TerminalColors.ENDC)
+            rospy.loginfo("%sToggled log to terminal.%s", __TerminalColors.WARNING, __TerminalColors.ENDC)
             return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed while toggling logger to terminal: %s", e)
@@ -141,7 +205,7 @@ def set_log_to_file(switch, filepath=''):
             rospy.logwarn("Error %i: %s", res.exit_code, res.error_description)
             return False
         else:
-            rospy.loginfo("%sToggled log to file: %s.%s", TerminalColors.WARNING, filepath, TerminalColors.ENDC)
+            rospy.loginfo("%sToggled log to file: %s.%s", __TerminalColors.WARNING, filepath, __TerminalColors.ENDC)
             return True
     except rospy.ServiceException, e:
         rospy.logwarn("Service call failed while toggling log to file: %s", e)
@@ -274,8 +338,12 @@ def check_ind_exists(client_id, reference_name, ind_name):
     :return:
     """
     rospy.wait_for_service('armor_interface_srv')
-    query = query_ind_b2_class(client_id, reference_name, ind_name, 'Thing')
-    if len(query.queried_objects) != 0:
+    try:
+        query = query_ind_b2_class(client_id, reference_name, ind_name, 'Thing')
         return query.queried_objects[0]
-    else:
-        return None
+    except rospy.ServiceException, e:
+        err_msgs = "Service call failed upon querying %s from %s" % (reference_name, client_id)
+        rospy.logwarn(err_msgs)
+        raise ArmorServiceCallError(err_msgs)
+
+
