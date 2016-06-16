@@ -143,37 +143,28 @@
 <dl class="function">
 <dt id="pyarmor.add_dataprop_to_ind">
 <code class="descclassname">pyarmor.</code><code class="descname">add_dataprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.add_dataprop_to_ind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pyarmor.add_ind_to_class">
-<code class="descclassname">pyarmor.</code><code class="descname">add_ind_to_class</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>ind_name</em>, <em>class_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.add_ind_to_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pyarmor.add_objectprop_to_ind">
-<code class="descclassname">pyarmor.</code><code class="descname">add_objectprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>value_obj_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.add_objectprop_to_ind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pyarmor.apply_buffered_changes">
-<code class="descclassname">pyarmor.</code><code class="descname">apply_buffered_changes</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.apply_buffered_changes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply buffered manipulations to the ontology when its reference has been initialized in buffered manipulation mode
-:param client_id:
-:type client_id: str
-:param reference_name:
-:type reference_name: str</p>
+<dd><p>Add a data property to an individual. If the data property to be assigned does not exist, it will be created.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>value</strong> (<em>str</em>) &#8211; value as a string.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
 <li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
 </ul>
@@ -183,89 +174,444 @@
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It returns the boolean consistency state of the ontology. This value is not updated if you are working in
-buffered reasoner mode!</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exception or break your ontology consistency. Since you are left free to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyarmor.add_ind_to_class">
+<code class="descclassname">pyarmor.</code><code class="descname">add_ind_to_class</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>ind_name</em>, <em>class_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.add_ind_to_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an individual to a class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to be added to the class.</li>
+<li><strong>class_name</strong> (<em>str</em>) &#8211; individual will be added to this class. It will be created a new class if it does not exist.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyarmor.add_objectprop_to_ind">
+<code class="descclassname">pyarmor.</code><code class="descname">add_objectprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>value_obj_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.add_objectprop_to_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an object property to an individual. If the object property to be assigned does not exist, it will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>objectprop_name</strong> (<em>str</em>) &#8211; name of the object property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_obj_name</strong> (<em>str</em>) &#8211; name of the individual to be used as property value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyarmor.apply_buffered_changes">
+<code class="descclassname">pyarmor.</code><code class="descname">apply_buffered_changes</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.apply_buffered_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply buffered manipulations to the ontology when its reference has been initialized in buffered manipulation mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.check_ind_exists">
 <code class="descclassname">pyarmor.</code><code class="descname">check_ind_exists</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>ind_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.check_ind_exists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Utility function to check an arbitrary named individual exists.
-WARNING: Returns the first individual returned by the query (if more than one is found)
-Else, it return None
-:param client_id:
-:param reference_name:
-:param ind_name:
-:return:</p>
+<dd><p>Utility function to check if an arbitrary named individual exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; the individual to be checked</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if individual exists, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.load_ref_from_file">
 <code class="descclassname">pyarmor.</code><code class="descname">load_ref_from_file</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>owl_file_path</em>, <em>iri</em>, <em>buffered_manipulation=False</em>, <em>reasoner='PELLET'</em>, <em>buffered_reasoner=False</em>, <em>mounted=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.load_ref_from_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Loads an ontology into armor from an .owl file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>owl_file_path</strong> (<em>str</em>) &#8211; </li>
+<li><strong>iri</strong> (<em>str</em>) &#8211; </li>
+<li><strong>buffered_manipulation</strong> (<em>bool</em>) &#8211; set buffered manipulations, default False</li>
+<li><strong>reasoner</strong> (<em>str</em>) &#8211; set which reasoner to use (PELLET, HERMIT, SNOROCKET, FACT), default PELLET</li>
+<li><strong>buffered_reasoner</strong> (<em>bool</em>) &#8211; set if reasoner should be buffered, default False</li>
+<li><strong>mounted</strong> (<em>bool</em>) &#8211; set if the client should be mounted on the reference, default False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.mount_on_ref">
 <code class="descclassname">pyarmor.</code><code class="descname">mount_on_ref</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.mount_on_ref" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Mounts a client on an ontology reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.query_dataprop_b2_ind">
 <code class="descclassname">pyarmor.</code><code class="descname">query_dataprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.query_dataprop_b2_ind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Query all values of a data property associated with an individual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; data property whose value you want to query.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual whose value you want to query.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> &#8211; list of queried values as strings.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.query_ind_b2_class">
-<code class="descclassname">pyarmor.</code><code class="descname">query_ind_b2_class</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>ind_name</em>, <em>class_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.query_ind_b2_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descclassname">pyarmor.</code><code class="descname">query_ind_b2_class</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>class_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.query_ind_b2_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the list of all individuals belonging to a class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>class_name</strong> (<em>str</em>) &#8211; a class in the ontology</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>list</strong> &#8211; the list of individual belonging to the class</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">str</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.replace_dataprop_b2_ind">
 <code class="descclassname">pyarmor.</code><code class="descname">replace_dataprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>new_value</em>, <em>old_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.replace_dataprop_b2_ind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Replace the value of a data property belonging to an individual. If the individual or the property instance to be
+replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; new value of the data property.</li>
+<li><strong>old_value</strong> (<em>str</em>) &#8211; value of the data property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>old_value</em> is necessary because more than one object property with different values may be applied to an
+individual. Only the specified instance will be replaced.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exception or break your ontology consistency. Since you are left fre to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
+</dd></dl>
 
 <dl class="function">
-<dt id="pyarmor.replace_objectprop_to_ind">
-<code class="descclassname">pyarmor.</code><code class="descname">replace_objectprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>new_value</em>, <em>old_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.replace_objectprop_to_ind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="pyarmor.replace_objectprop_b2_ind">
+<code class="descclassname">pyarmor.</code><code class="descname">replace_objectprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>new_value</em>, <em>old_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.replace_objectprop_b2_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the value of an object property belonging to an individual. If the individual or the property instance to be
+replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>objectprop_name</strong> (<em>str</em>) &#8211; name of the object property to replace.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual whose property needs to be replaced.</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; new value of the object property.</li>
+<li><strong>old_value</strong> (<em>str</em>) &#8211; value of the object property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>old_value</em> is necessary because more than one object property with different values may be applied to an
+individual. Only the specified instance will be replaced.</p>
+</div>
+</dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.replace_one_dataprop_b2_ind">
 <code class="descclassname">pyarmor.</code><code class="descname">replace_one_dataprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>new_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.replace_one_dataprop_b2_ind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use with care! This is an utility function that replace the value of the first returned data property value
-associated to an individual without specifying the old value to be replaced. It is supposed to be used only when
-it is guaranteed that one or less data property value associated to that individual. Else, it will fail.
-:param client_id:
-:param reference_name:
-:param dataprop_name:
-:param ind_name:
-:param value_type:
-:param new_value:
-:return:</p>
+<dd><p><strong>Use with care:</strong> Utility function that replace the value of the first returned data property value
+associated to an individual without specifying the old value to be replaced. Read Notes for further information.
+If the individual or the property instance to be replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; value of the data property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function is meant to be used when only one or less data property instance is expected to be associated
+to that individual. The function check this condition to protect your ontology and raises
+<em>ArmorServiceInternalError</em> if it is not satisfied.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exception or break your ontology consistency. Since you are left fre to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyarmor.save_ref_with_inferences">
 <code class="descclassname">pyarmor.</code><code class="descname">save_ref_with_inferences</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.save_ref_with_inferences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save ontology with latest inferred axioms to specified filepath
-:param client_id:
-:type client_id: str
-:param reference_name:
-:type reference_name: str
-:param filepath:
-:type filepath: str</p>
+<dd><p>Save ontology with latest inferred axioms to specified filepath</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>filepath</strong> (<em>str</em>) &#8211; </li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">None</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
 <li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
 </ul>
@@ -278,32 +624,69 @@ it is guaranteed that one or less data property value associated to that individ
 <dl class="function">
 <dt id="pyarmor.set_log_to_file">
 <code class="descclassname">pyarmor.</code><code class="descname">set_log_to_file</code><span class="sig-paren">(</span><em>switch</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.set_log_to_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pyarmor.set_log_to_terminal">
-<code class="descclassname">pyarmor.</code><code class="descname">set_log_to_terminal</code><span class="sig-paren">(</span><em>switch</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.set_log_to_terminal" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pyarmor.sync_buffered_reasoner">
-<code class="descclassname">pyarmor.</code><code class="descname">sync_buffered_reasoner</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.sync_buffered_reasoner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sync ontology reference reasoner when operating in buffered reasoner mode
-:param client_id:
-:type client_id: str
-:param reference_name:
-:type reference_name: str</p>
+<dd><p>Set ARMOR to log to file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>switch</strong> (<em>bool</em>) &#8211; </li>
+<li><strong>filepath</strong> (<em>str</em>) &#8211; </li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyarmor.set_log_to_terminal">
+<code class="descclassname">pyarmor.</code><code class="descname">set_log_to_terminal</code><span class="sig-paren">(</span><em>switch</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.set_log_to_terminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set ARMOR to log to terminal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>switch</strong> (<em>bool</em>) &#8211; </p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyarmor.sync_buffered_reasoner">
+<code class="descclassname">pyarmor.</code><code class="descname">sync_buffered_reasoner</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.sync_buffered_reasoner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sync ontology reference reasoner when operating in buffered reasoner mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
 <li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
 <li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
 </ul>
@@ -316,7 +699,26 @@ it is guaranteed that one or less data property value associated to that individ
 <dl class="function">
 <dt id="pyarmor.unmount_from_ref">
 <code class="descclassname">pyarmor.</code><code class="descname">unmount_from_ref</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyarmor.unmount_from_ref" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Unmount a client from an ontology.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#pyarmor.ArmorServiceCallError" title="pyarmor.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="#pyarmor.ArmorServiceInternalError" title="pyarmor.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 
