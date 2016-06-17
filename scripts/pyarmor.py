@@ -60,12 +60,10 @@ def apply_buffered_changes(client_id, reference_name):
                       __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
         err_msg = "Armor service internal error. Buffered changes have not been applied. Exception: %s" % e
-        rospy.logerr(err_msg)
         raise ArmorServiceCallError(err_msg)
     if res.success:
         return res.is_consistent
     else:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -91,12 +89,10 @@ def sync_buffered_reasoner(client_id, reference_name):
                       __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
         err_msg = "Armor service internal error. Buffered reasoner could not be synced. Exception: %s" % e
-        rospy.logerr(err_msg)
         raise ArmorServiceCallError(err_msg)
     if res.success:
         return res.is_consistent
     else:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -124,10 +120,8 @@ def save_ref_with_inferences(client_id, reference_name, filepath):
     except rospy.ServiceException, e:
         err_msg = "Armor service internal error. Cannot save reference %s to %s." % \
                   reference_name, filepath
-        rospy.logerr(err_msg)
         raise ArmorServiceCallError(err_msg)
     if not res.success:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -160,10 +154,8 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
                              [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
     except rospy.ServiceException, e:
         err_msgs = "Service call failed upon reference %s from %s" % (reference_name, client_id)
-        rospy.logwarn(err_msgs)
         raise ArmorServiceCallError(err_msgs)
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -185,10 +177,8 @@ def mount_on_ref(client_id, reference_name):
         rospy.loginfo("%s%s mounted on %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon mounting %s on reference %s." % client_id, reference_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
     if not res.success:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -210,10 +200,8 @@ def unmount_from_ref(client_id, reference_name):
         rospy.loginfo("%s%s unmounted from %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
     except rospy.ServiceException, e:
         err_msg = "Service call failed while unmounting %s from reference %s." % client_id, reference_name, e
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
     if not res.success:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -238,10 +226,8 @@ def set_log_to_terminal(switch):
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed while toggling logger to terminal"
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
     if not res.success:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
@@ -264,7 +250,6 @@ def set_log_to_file(switch, filepath=''):
                 res = armor_call('', '', 'LOG', 'FILE', 'ON', [filepath])
             else:
                 err_msg = "PYARMOR ERROR: please select a filepath to log to when you toggle on ARMOR logging to file."
-                rospy.logerr(err_msg)
                 raise ArmorServiceCallError(err_msg)
         else:
             res = armor_call('', '', 'LOG', 'FILE', 'OFF', [])
@@ -273,11 +258,9 @@ def set_log_to_file(switch, filepath=''):
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed while toggling log to file."
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logwarn(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 # =========================================  MANIPULATIONS  ========================================= #
@@ -309,10 +292,8 @@ def add_ind_to_class(client_id, reference_name, ind_name, class_name):
         res = armor_call(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding individual %s to class %s: %s" % ind_name, class_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -347,11 +328,9 @@ def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, 
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % objectprop_name, ind_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -394,11 +373,9 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % dataprop_name, ind_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -439,11 +416,9 @@ def replace_objectprop_b2_ind(client_id, reference_name, objectprop_name, ind_na
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % objectprop_name, ind_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -480,7 +455,7 @@ def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, 
 
     Note:
         You are free to set any value type but if the type in *value_type* and *value* does not match you may incur in
-        *ArmorServiceInternalError* exception or break your ontology consistency. Since you are left fre to send any
+        *ArmorServiceInternalError* exception or break your ontology consistency. Since you are left free to send any
         value to the ontology, you may get inconsistent results even if you submit a proper request but the data
         property in the ontology is expecting a different specific value type.
     """
@@ -491,11 +466,9 @@ def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, 
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % dataprop_name, ind_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -533,7 +506,7 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
 
     Note:
         You are free to set any value type but if the type in *value_type* and *value* does not match you may incur in
-        *ArmorServiceInternalError* exception or break your ontology consistency. Since you are left fre to send any
+        *ArmorServiceInternalError* exception or break your ontology consistency. Since you are left free to send any
         value to the ontology, you may get inconsistent results even if you submit a proper request but the data
         property in the ontology is expecting a different specific value type.
     """
@@ -554,16 +527,13 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
         err_msg = "You are trying to replace a single value of %s belonging to %s " \
                   "but multiple values were found. Check your ontology and the " \
                   "way you add data properties too your individuals." % dataprop_name, ind_name
-        rospy.logerr(err_msg)
         raise ArmorServiceInternalError(err_msg, "206")
 
     except rospy.ServiceException, e:
         err_msg = "Failed to replace single value of data property %s belonging to %s." % dataprop_name, ind_name
-        rospy.logerr(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.is_consistent
@@ -592,11 +562,9 @@ def query_ind_b2_class(client_id, reference_name, class_name):
         res = armor_call(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying individuals belonging to class %s" % class_name
-        rospy.logwarn(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.queried_objects
@@ -620,11 +588,9 @@ def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
         res = armor_call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying property %s to individual %s." % dataprop_name, ind_name
-        rospy.logerr(err_msg)
         raise ArmorServiceCallError(err_msg)
 
     if not res.success:
-        rospy.logerr(res.error_description)
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
         return res.queried_objects
@@ -652,7 +618,6 @@ def check_ind_exists(client_id, reference_name, ind_name):
 
     except rospy.ServiceException, e:
         err_msgs = "Service call failed upon querying %s from %s" % (reference_name, client_id)
-        rospy.logwarn(err_msgs)
         raise ArmorServiceCallError(err_msgs)
 
     if query:
