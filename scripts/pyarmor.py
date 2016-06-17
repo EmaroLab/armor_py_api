@@ -700,7 +700,7 @@ def check_ind_exists(client_id, reference_name, ind_name):
     except rospy.ROSException, e:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if query:
+    if ind_name in query:
         return True
     else:
         return False
