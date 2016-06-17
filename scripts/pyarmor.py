@@ -305,10 +305,28 @@ def set_log_to_file(switch, filepath=''):
 
 
 def set_service_timeout(seconds):
+    """
+    Set the wait timeout for ARMOR service calls.
+
+    Args:
+        seconds:
+
+    Returns:
+
+    """
     __Config.SERVICE_TIMEOUT = seconds
 
 
-def set_service_client(client_name):
+def set_service_name(client_name):
+    """
+    Set service name to be used for calls.
+
+    Args:
+        client_name:
+
+    Returns:
+
+    """
     __Config.ARMOR_CLIENT_NAME = client_name
     __Config.ARMOR_CLIENT = rospy.ServiceProxy(__Config.ARMOR_CLIENT_NAME, ArmorDirective)
 
