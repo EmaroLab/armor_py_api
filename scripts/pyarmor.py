@@ -2,17 +2,6 @@ from armor_msgs.srv import ArmorDirective
 import rospy
 
 
-class __TerminalColors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
 class ArmorServiceCallError(Exception):
     def __init__(self, message):
         self.msg = message
@@ -29,7 +18,21 @@ class ArmorServiceInternalError(Exception):
 # =========================================     CLIENT      ========================================= #
 
 
-armor_call = rospy.ServiceProxy('armor_interface_srv', ArmorDirective)
+class __Config:
+    
+    ARMOR_CLIENT_NAME = 'armor_interface_srv'
+    ARMOR_CLIENT = rospy.ServiceProxy(ARMOR_CLIENT_NAME, ArmorDirective)
+    SERVICE_TIMEOUT = 5
+    
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 # =========================================     UTILITY     ========================================= #
 
@@ -53,14 +56,19 @@ def apply_buffered_changes(client_id, reference_name):
         It returns the boolean consistency state of the ontology. This value is not updated to the last operation
         if you are working in buffered reasoner or manipulation mode!
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'APPLY', '', '', [])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'APPLY', '', '', [])
         rospy.loginfo("%sBuffered manipulations to %s applied.%s",
-                      __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
+                      __Config.OKGREEN, reference_name, __Config.ENDC)
+
     except rospy.ServiceException, e:
         err_msg = "Armor service internal error. Buffered changes have not been applied. Exception: %s" % e
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if res.success:
         return res.is_consistent
     else:
@@ -82,14 +90,19 @@ def sync_buffered_reasoner(client_id, reference_name):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'REASON', '', '', [])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME, __Config.SERVICE_TIMEOUT)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'REASON', '', '', [])
         rospy.loginfo("%sReasoner synced on %s applied.%s",
-                      __TerminalColors.OKGREEN, reference_name, __TerminalColors.ENDC)
+                      __Config.OKGREEN, reference_name, __Config.ENDC)
+        
     except rospy.ServiceException, e:
-        err_msg = "Armor service internal error. Buffered reasoner could not be synced. Exception: %s" % e
+        err_msg = "Armor service internal error. Buffered reasoner could not be synced."
         raise ArmorServiceCallError(err_msg)
+    
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+    
     if res.success:
         return res.is_consistent
     else:
@@ -112,15 +125,20 @@ def save_ref_with_inferences(client_id, reference_name, filepath):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
         rospy.loginfo("%sReference %s saved to %s.%s",
-                      __TerminalColors.OKGREEN, reference_name, filepath, __TerminalColors.ENDC)
+                      __Config.OKGREEN, reference_name, filepath, __Config.ENDC)
+
     except rospy.ServiceException, e:
         err_msg = "Armor service internal error. Cannot save reference %s to %s." % \
                   reference_name, filepath
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
@@ -144,17 +162,22 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
         if mounted:
-            res = armor_call(client_id, reference_name, 'LOAD', 'FILE', 'MOUNTED',
-                             [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+            res = __Config.ARMOR_CLIENT(client_id, reference_name, 'LOAD', 'FILE', 'MOUNTED',
+                               [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
         else:
-            res = armor_call(client_id, reference_name, 'LOAD', 'FILE', '',
-                             [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+            res = __Config.ARMOR_CLIENT(client_id, reference_name, 'LOAD', 'FILE', '',
+                               [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
+
     except rospy.ServiceException, e:
         err_msgs = "Service call failed upon reference %s from %s" % (reference_name, client_id)
         raise ArmorServiceCallError(err_msgs)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
@@ -171,13 +194,18 @@ def mount_on_ref(client_id, reference_name):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'MOUNT', '', '', [])
-        rospy.loginfo("%s%s mounted on %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'MOUNT', '', '', [])
+        rospy.loginfo("%s%s mounted on %s.%s", __Config.WARNING, client_id, reference_name, __Config.ENDC)
+
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon mounting %s on reference %s." % client_id, reference_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
@@ -194,13 +222,18 @@ def unmount_from_ref(client_id, reference_name):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'UNMOUNT', '', '', [])
-        rospy.loginfo("%s%s unmounted from %s.%s", __TerminalColors.WARNING, client_id, reference_name, __TerminalColors.ENDC)
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'UNMOUNT', '', '', [])
+        rospy.loginfo("%s%s unmounted from %s.%s", __Config.WARNING, client_id, reference_name, __Config.ENDC)
+
     except rospy.ServiceException, e:
         err_msg = "Service call failed while unmounting %s from reference %s." % client_id, reference_name, e
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
@@ -216,17 +249,21 @@ def set_log_to_terminal(switch):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
         if switch:
-            res = armor_call('', '', 'LOG', 'SCREEN', 'ON', [])
+            res = __Config.ARMOR_CLIENT('', '', 'LOG', 'SCREEN', 'ON', [])
         else:
-            res = armor_call('', '', 'LOG', 'SCREEN', 'OFF', [])
-        rospy.loginfo("%sToggled log to terminal.%s", __TerminalColors.WARNING, __TerminalColors.ENDC)
+            res = __Config.ARMOR_CLIENT('', '', 'LOG', 'SCREEN', 'OFF', [])
+        rospy.loginfo("%sToggled log to terminal.%s", __Config.WARNING, __Config.ENDC)
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed while toggling logger to terminal"
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
@@ -243,25 +280,37 @@ def set_log_to_file(switch, filepath=''):
         ArmorServiceCallError: if call to ARMOR fails
         ArmorServiceInternalError: if ARMOR reports an internal error
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
         if switch:
             if filepath != '':
-                res = armor_call('', '', 'LOG', 'FILE', 'ON', [filepath])
+                res = __Config.ARMOR_CLIENT('', '', 'LOG', 'FILE', 'ON', [filepath])
             else:
                 err_msg = "PYARMOR ERROR: please select a filepath to log to when you toggle on ARMOR logging to file."
                 raise ArmorServiceCallError(err_msg)
         else:
-            res = armor_call('', '', 'LOG', 'FILE', 'OFF', [])
+            res = __Config.ARMOR_CLIENT('', '', 'LOG', 'FILE', 'OFF', [])
 
-        rospy.loginfo("%sToggled log to file: %s.%s", __TerminalColors.WARNING, filepath, __TerminalColors.ENDC)
+        rospy.loginfo("%sToggled log to file: %s.%s", __Config.WARNING, filepath, __Config.ENDC)
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed while toggling log to file."
         raise ArmorServiceCallError(err_msg)
 
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
+
+
+def set_service_timeout(seconds):
+    __Config.SERVICE_TIMEOUT = seconds
+
+
+def set_service_client(client_name):
+    __Config.ARMOR_CLIENT_NAME = client_name
+    __Config.ARMOR_CLIENT = rospy.ServiceProxy(__Config.ARMOR_CLIENT_NAME, ArmorDirective)
 
 # =========================================  MANIPULATIONS  ========================================= #
 
@@ -287,12 +336,17 @@ def add_ind_to_class(client_id, reference_name, ind_name, class_name):
         It returns the boolean consistency state of the ontology. This value is not updated to the last operation
         if you are working in buffered reasoner or manipulation mode!
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
+
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding individual %s to class %s: %s" % ind_name, class_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
     else:
@@ -321,14 +375,17 @@ def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, 
         It returns the boolean consistency state of the ontology. This value is not updated to the last operation
         if you are working in buffered reasoner or manipulation mode!
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
-                         [objectprop_name, ind_name, value_obj_name])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
+                           [objectprop_name, ind_name, value_obj_name])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % objectprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -366,14 +423,17 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
         property in the ontology is expecting a different specific value type.
 
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
-                         [dataprop_name, ind_name, value_type, value])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
+                           [dataprop_name, ind_name, value_type, value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % dataprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -409,14 +469,17 @@ def replace_objectprop_b2_ind(client_id, reference_name, objectprop_name, ind_na
         *old_value* is necessary because more than one object property with different values may be applied to an
         individual. Only the specified instance will be replaced.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
-                         [objectprop_name, ind_name, new_value, old_value])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
+                           [objectprop_name, ind_name, new_value, old_value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % objectprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -459,14 +522,17 @@ def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, 
         value to the ontology, you may get inconsistent results even if you submit a proper request but the data
         property in the ontology is expecting a different specific value type.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
                            [dataprop_name, ind_name, value_type, new_value, old_value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % dataprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -510,8 +576,8 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
         value to the ontology, you may get inconsistent results even if you submit a proper request but the data
         property in the ontology is expecting a different specific value type.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
         query = query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name)
 
         assert len(query) <= 1
@@ -532,6 +598,9 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
     except rospy.ServiceException, e:
         err_msg = "Failed to replace single value of data property %s belonging to %s." % dataprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -557,12 +626,16 @@ def query_ind_b2_class(client_id, reference_name, class_name):
         ArmorServiceCallError: if call to ARMOR fails.
         ArmorServiceInternalError: if ARMOR reports an internal error.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
+
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying individuals belonging to class %s" % class_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -583,12 +656,16 @@ def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
     Returns:
         list(str): list of queried values as strings.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
-        res = armor_call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
+        res = __Config.ARMOR_CLIENT(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
+
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying property %s to individual %s." % dataprop_name, ind_name
         raise ArmorServiceCallError(err_msg)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
         raise ArmorServiceInternalError(res.error_description, res.exit_code)
@@ -612,13 +689,16 @@ def check_ind_exists(client_id, reference_name, ind_name):
         ArmorServiceCallError: if call to ARMOR fails.
         ArmorServiceInternalError: if ARMOR reports an internal error.
     """
-    rospy.wait_for_service('armor_interface_srv')
     try:
+        rospy.wait_for_service(__Config.ARMOR_CLIENT_NAME)
         query = query_ind_b2_class(client_id, reference_name, 'Thing')
 
     except rospy.ServiceException, e:
         err_msgs = "Service call failed upon querying %s from %s" % (reference_name, client_id)
         raise ArmorServiceCallError(err_msgs)
+
+    except rospy.ROSException, e:
+        raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if query:
         return True
