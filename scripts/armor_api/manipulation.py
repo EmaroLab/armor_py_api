@@ -8,8 +8,8 @@ from .exceptions import ArmorServiceInternalError, ArmorServiceCallError
 from .query import query_dataprop_b2_ind
 
 __author__ = "Alessio Capitanelli"
-__copyright__ = "Copyright 2016, EmaroLab"
-__license__ = "GPL"
+__copyright__ = "Copyright 2016, ArmorPy"
+__license__ = "GNU"
 __version__ = "1.0.0"
 __maintainer__ = "Alessio Capitanelli"
 __email__ = "alessio.capitanelli@dibris.unige.it"
