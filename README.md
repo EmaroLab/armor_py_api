@@ -28,6 +28,6 @@ In PyCharm you can add a folder as a source in the menu:
 
 **Note:** if your workspace is corrrectly set, installing ArmorPy is enough to
 use it in your code and run it. Thus, even if your IDE cannot find your imports,
-your code will work (it should find an __init__.py file only). Adding sources
+your code will work (it should find an **__init__.py** file only). Adding sources
 will allow you to see ArmorPy code for quick reference, easier debugging and 
 getting rid of annoying warnings.
