@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ArmorPy - Easy Ontology managament in ROS &mdash; ArmorPy 1.0.0 documentation</title>
+  <title>Manipulation module &mdash; ArmorPy 1.0.0 documentation</title>
   
 
   
@@ -30,8 +30,10 @@
   
 
   
-    <link rel="top" title="ArmorPy 1.0.0 documentation" href="#"/>
-        <link rel="next" title="Armor API module" href="armor_api.html"/> 
+    <link rel="top" title="ArmorPy 1.0.0 documentation" href="index.html"/>
+        <link rel="up" title="Armor API module" href="armor_api.html"/>
+        <link rel="next" title="Query module" href="query.html"/>
+        <link rel="prev" title="Armor API module" href="armor_api.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +51,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> ArmorPy
+            <a href="index.html" class="icon icon-home"> ArmorPy
           
 
           
@@ -80,8 +82,14 @@
           
             
             
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor API module</a></li>
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="armor_api.html">Armor API module</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Manipulation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query.html">Query module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysutil.html">Sysutil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions module</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -95,7 +103,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">ArmorPy</a>
+        <a href="index.html">ArmorPy</a>
       </nav>
 
 
@@ -110,13 +118,15 @@
 
 <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
+    <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>ArmorPy  - Easy Ontology managament in ROS</li>
+          <li><a href="armor_api.html">Armor API module</a> &raquo;</li>
+      
+    <li>Manipulation module</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/manipulation.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -126,41 +136,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="armorpy-easy-ontology-managament-in-ros">
-<h1>ArmorPy  - Easy Ontology managament in ROS<a class="headerlink" href="#armorpy-easy-ontology-managament-in-ros" title="Permalink to this headline">¶</a></h1>
-<p><strong>ArmorPy</strong> is a wrapper library for <strong>ARMOR</strong> - <em>A ROS Multi Ontology Reference</em></p>
-<p><strong>ARMOR</strong> is a service that can manage multiple ontologies in ROS, allowing you
-to query and manipulate ontologies from one or more clients, independently of the
-language they are coded in. In thi way you can keep all your semantic knowledge
-in a single location without giving up flexibility. You can also avoid writing a single
-code of Java.</p>
-<p><strong>ArmorPy</strong> helps you speed up the development process of any node which is supposed to
-work with ARMOR:</p>
-<ul class="simple">
-<li>No need to manually call ARMOR and compile the lengthy messages! Everything is done inside ArmorPy high-level functions.</li>
-<li>Higher level utility functions for common operations actually performs multiple calls to ARMOR and returns the desired results, keeping your code clean and tidy.</li>
-<li>Monitors ARMOR results and service state for steady fault recovery.</li>
-</ul>
-<p><strong>Check it out!</strong></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor API module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="manipulation.html">Manipulation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysutil.html">Sysutil module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions module</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
+  <div class="section" id="manipulation-module">
+<h1>Manipulation module<a class="headerlink" href="#manipulation-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -170,8 +147,10 @@ work with ARMOR:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="armor_api.html" class="btn btn-neutral float-right" title="Armor API module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="query.html" class="btn btn-neutral float-right" title="Query module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+      
+        <a href="armor_api.html" class="btn btn-neutral" title="Armor API module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
