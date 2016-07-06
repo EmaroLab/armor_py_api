@@ -136,8 +136,282 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="manipulation-module">
-<h1>Manipulation module<a class="headerlink" href="#manipulation-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-armor_api.manipulation">
+<span id="manipulation-module"></span><h1>Manipulation module<a class="headerlink" href="#module-armor_api.manipulation" title="Permalink to this headline">¶</a></h1>
+<p>Manipulation commands for Armor Python API &#8211;ArmorPy.</p>
+<dl class="function">
+<dt id="armor_api.manipulation.add_dataprop_to_ind">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">add_dataprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#add_dataprop_to_ind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.add_dataprop_to_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a data property to an individual. If the data property to be assigned does not exist, it will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>value</strong> (<em>str</em>) &#8211; value as a string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exceptions or break your ontology consistency. Since you are left free to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.manipulation.add_ind_to_class">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">add_ind_to_class</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>ind_name</em>, <em>class_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#add_ind_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.add_ind_to_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an individual to a class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to be added to the class.</li>
+<li><strong>class_name</strong> (<em>str</em>) &#8211; individual will be added to this class. It will be created a new class if it does not exist.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.manipulation.add_objectprop_to_ind">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">add_objectprop_to_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>value_obj_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#add_objectprop_to_ind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.add_objectprop_to_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an object property to an individual. If the object property to be assigned does not exist, it will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>objectprop_name</strong> (<em>str</em>) &#8211; name of the object property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_obj_name</strong> (<em>str</em>) &#8211; name of the individual to be used as property value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.manipulation.replace_dataprop_b2_ind">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">replace_dataprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>new_value</em>, <em>old_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#replace_dataprop_b2_ind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.replace_dataprop_b2_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the value of a data property belonging to an individual. If the individual or the property instance to be
+replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; new value of the data property.</li>
+<li><strong>old_value</strong> (<em>str</em>) &#8211; value of the data property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>old_value</em> is necessary because more than one object property with different values may be applied to an
+individual. Only the specified instance will be replaced.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exceptions or break your ontology consistency. Since you are left free to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.manipulation.replace_objectprop_b2_ind">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">replace_objectprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>objectprop_name</em>, <em>ind_name</em>, <em>new_value</em>, <em>old_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#replace_objectprop_b2_ind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.replace_objectprop_b2_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace the value of an object property belonging to an individual. If the individual or the property instance to be
+replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>objectprop_name</strong> (<em>str</em>) &#8211; name of the object property to replace.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual whose property needs to be replaced.</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; new value of the object property.</li>
+<li><strong>old_value</strong> (<em>str</em>) &#8211; value of the object property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>old_value</em> is necessary because more than one object property with different values may be applied to an
+individual. Only the specified instance will be replaced.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.manipulation.replace_one_dataprop_b2_ind">
+<code class="descclassname">armor_api.manipulation.</code><code class="descname">replace_one_dataprop_b2_ind</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>dataprop_name</em>, <em>ind_name</em>, <em>value_type</em>, <em>new_value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/manipulation.html#replace_one_dataprop_b2_ind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.manipulation.replace_one_dataprop_b2_ind" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Use with care:</strong> Utility function that replace the value of the first returned data property value
+associated to an individual without specifying the old value to be replaced. Read Notes for further information.
+If the individual or the property instance to be replaced do not exist, they will be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>dataprop_name</strong> (<em>str</em>) &#8211; name of the data property to assign.</li>
+<li><strong>ind_name</strong> (<em>str</em>) &#8211; individual to assign the data property value.</li>
+<li><strong>value_type</strong> (<em>str</em>) &#8211; type of the value to assign (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).</li>
+<li><strong>new_value</strong> (<em>str</em>) &#8211; value of the data property to be replaced.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, else False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails.</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function is meant to be used when only one or less data property instance is expected to be associated
+to that individual. The function check this condition to protect your ontology and raises
+<em>ArmorServiceInternalError</em> if it is not satisfied.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You are free to set any value type but if the type in <em>value_type</em> and <em>value</em> does not match you may incur in
+<em>ArmorServiceInternalError</em> exceptions or break your ontology consistency. Since you are left free to send any
+value to the ontology, you may get inconsistent results even if you submit a proper request but the data
+property in the ontology is expecting a different specific value type.</p>
+</div>
+</dd></dl>
+
 </div>
 
 

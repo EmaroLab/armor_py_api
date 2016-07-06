@@ -136,8 +136,258 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="sysutil-module">
-<h1>Sysutil module<a class="headerlink" href="#sysutil-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-armor_api.sysutil">
+<span id="sysutil-module"></span><h1>Sysutil module<a class="headerlink" href="#module-armor_api.sysutil" title="Permalink to this headline">¶</a></h1>
+<p>System utility commands for Armor Python API &#8211;ArmorPy.</p>
+<dl class="function">
+<dt id="armor_api.sysutil.apply_buffered_changes">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">apply_buffered_changes</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#apply_buffered_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.apply_buffered_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply buffered manipulations to the ontology when its reference has been initialized in buffered manipulation mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+if you are working in buffered reasoner or manipulation mode!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.load_ref_from_file">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">load_ref_from_file</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>owl_file_path</em>, <em>iri</em>, <em>buffered_manipulation=False</em>, <em>reasoner='PELLET'</em>, <em>buffered_reasoner=False</em>, <em>mounted=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#load_ref_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.load_ref_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads an ontology into armor from an .owl file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>owl_file_path</strong> (<em>str</em>) &#8211; </li>
+<li><strong>iri</strong> (<em>str</em>) &#8211; </li>
+<li><strong>buffered_manipulation</strong> (<em>bool</em>) &#8211; set buffered manipulations, default False</li>
+<li><strong>reasoner</strong> (<em>str</em>) &#8211; set which reasoner to use (PELLET, HERMIT, SNOROCKET, FACT), default PELLET</li>
+<li><strong>buffered_reasoner</strong> (<em>bool</em>) &#8211; set if reasoner should be buffered, default False</li>
+<li><strong>mounted</strong> (<em>bool</em>) &#8211; set if the client should be mounted on the reference, default False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.mount_on_ref">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">mount_on_ref</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#mount_on_ref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.mount_on_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mounts a client on an ontology reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.save_ref_with_inferences">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">save_ref_with_inferences</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#save_ref_with_inferences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.save_ref_with_inferences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save ontology with latest inferred axioms to specified filepath</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>filepath</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.set_log_to_file">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">set_log_to_file</code><span class="sig-paren">(</span><em>switch</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#set_log_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.set_log_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set ARMOR to log to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>switch</strong> (<em>bool</em>) &#8211; </li>
+<li><strong>filepath</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.set_log_to_terminal">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">set_log_to_terminal</code><span class="sig-paren">(</span><em>switch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#set_log_to_terminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.set_log_to_terminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set ARMOR to log to terminal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>switch</strong> (<em>bool</em>) &#8211; </p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.set_service_name">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">set_service_name</code><span class="sig-paren">(</span><em>client_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#set_service_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.set_service_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set service name to be used for calls.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client_name</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.set_service_timeout">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">set_service_timeout</code><span class="sig-paren">(</span><em>seconds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#set_service_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.set_service_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the wait timeout for ARMOR service calls.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seconds</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.sync_buffered_reasoner">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">sync_buffered_reasoner</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#sync_buffered_reasoner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.sync_buffered_reasoner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sync ontology reference reasoner when operating in buffered reasoner mode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if ontology is consistent, False otherwise</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="armor_api.sysutil.unmount_from_ref">
+<code class="descclassname">armor_api.sysutil.</code><code class="descname">unmount_from_ref</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/sysutil.html#unmount_from_ref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.sysutil.unmount_from_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unmount a client from an ontology.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client_id</strong> (<em>str</em>) &#8211; </li>
+<li><strong>reference_name</strong> (<em>str</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceCallError" title="armor_api.exceptions.ArmorServiceCallError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceCallError</span></code></a> &#8211; if call to ARMOR fails</li>
+<li><a class="reference internal" href="exceptions.html#armor_api.exceptions.ArmorServiceInternalError" title="armor_api.exceptions.ArmorServiceInternalError"><code class="xref py py-exc docutils literal"><span class="pre">armor_api.exceptions.ArmorServiceInternalError</span></code></a> &#8211; if ARMOR reports an internal error</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
