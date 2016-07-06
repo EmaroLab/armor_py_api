@@ -1,7 +1,7 @@
-pyarmor module
-==============
+Query module
+============
 
-.. automodule:: pyarmor
+.. automodule:: armor_api.query
     :members:
     :undoc-members:
     :show-inheritance:

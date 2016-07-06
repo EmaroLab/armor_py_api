@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(pyarmor)
+project(armor_py_api)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -99,7 +99,7 @@ catkin_python_setup()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES pyarmor
+#  LIBRARIES armor_py_api
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -113,24 +113,24 @@ catkin_package(
 # include_directories(include)
 
 ## Declare a C++ library
-# add_library(pyarmor
-#   src/${PROJECT_NAME}/pyarmor.cpp
+# add_library(armor_py_api
+#   src/${PROJECT_NAME}/armor_py_api.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(pyarmor ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(armor_py_api ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(pyarmor_node src/pyarmor_node.cpp)
+# add_executable(armor_py_api_node src/armor_py_api_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(pyarmor_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(armor_py_api_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(pyarmor_node
+# target_link_libraries(armor_py_api_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -138,9 +138,9 @@ catkin_package(
 ## Install ##
 #############
 
-# catkin_install_python(PROGRAMS scripts/pyarmor.py
+# catkin_install_python(PROGRAMS scripts/armor_py_api.py
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-# catkin_install_python(PROGRAMS scripts/pyarmor.py
+# catkin_install_python(PROGRAMS scripts/armor_py_api.py
 #   DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables
@@ -154,7 +154,7 @@ catkin_package(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS pyarmor pyarmor_node
+# install(TARGETS armor_py_api armor_py_api_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -179,7 +179,7 @@ catkin_package(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_pyarmor.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_armor_py_api.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
