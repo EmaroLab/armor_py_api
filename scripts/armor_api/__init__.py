@@ -24,5 +24,5 @@ __maintainer__ = "Alessio Capitanelli"
 __email__ = "alessio.capitanelli@dibris.unige.it"
 __status__ = "Development"
 
-__all__ = ['manipulation', 'query', 'sysutil', 'exceptions']
+__all__ = ['manipulation', 'query', 'sysutil', 'exceptions', 'client']
 

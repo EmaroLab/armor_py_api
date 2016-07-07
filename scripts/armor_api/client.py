@@ -17,7 +17,25 @@ __status__ = "Development"
 # =========================================     CLIENT      ========================================= #
 
 
-class Client:
-    ARMOR_CLIENT_NAME = 'armor_interface_srv'
-    ARMOR_CLIENT = rospy.ServiceProxy(ARMOR_CLIENT_NAME, ArmorDirective)
-    SERVICE_TIMEOUT = 5
+name = 'armor_interface_srv'
+handle = rospy.ServiceProxy(name, ArmorDirective)
+timeout = 5
+
+
+def call(client_id, reference_name, first_dir, second_dir, third_dir, args_list):
+    rospy.wait_for_service(name, timeout)
+    return handle(client_id, reference_name, first_dir, second_dir, third_dir, args_list)
+
+
+def set_client_name(new_name):
+    global name
+    global handle
+
+    name = new_name
+    handle = rospy.ServiceProxy(new_name, ArmorDirective)
+
+
+def set_client_timeout(new_timeout):
+    global timeout
+    timeout = new_timeout
+

@@ -3,7 +3,7 @@ Querying commands for Armor Python API --ArmorPy.
 """
 
 from .exceptions import ArmorServiceInternalError, ArmorServiceCallError
-from .client import Client
+import client
 import rospy
 
 __author__ = "Alessio Capitanelli"
@@ -34,8 +34,7 @@ def query_ind_b2_class(client_id, reference_name, class_name):
         armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
+        res = client.call(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying individuals belonging to class %s" % class_name
@@ -64,8 +63,7 @@ def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
         list(str): list of queried values as strings.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
+        res = client.call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon querying property %s to individual %s." % (dataprop_name, ind_name)
@@ -97,7 +95,6 @@ def check_ind_exists(client_id, reference_name, ind_name):
         armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
         query = query_ind_b2_class(client_id, reference_name, 'Thing')
 
     except rospy.ServiceException, e:

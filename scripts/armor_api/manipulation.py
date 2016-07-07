@@ -3,7 +3,7 @@ Manipulation commands for Armor Python API --ArmorPy.
 """
 
 import rospy
-from .client import Client
+import client
 from .exceptions import ArmorServiceInternalError, ArmorServiceCallError
 from .query import query_dataprop_b2_ind
 
@@ -41,8 +41,7 @@ def add_ind_to_class(client_id, reference_name, ind_name, class_name):
         if you are working in buffered reasoner or manipulation mode!
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
+        res = client.call(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding individual %s to class %s: %s" % (ind_name, class_name, e)
@@ -80,9 +79,8 @@ def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, 
         if you are working in buffered reasoner or manipulation mode!
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
-                           [objectprop_name, ind_name, value_obj_name])
+        res = client.call(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
+                          [objectprop_name, ind_name, value_obj_name])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % (objectprop_name, ind_name)
@@ -128,9 +126,8 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
 
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
-                                    [dataprop_name, ind_name, value_type, value])
+        res = client.call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
+                          [dataprop_name, ind_name, value_type, value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % (dataprop_name, ind_name)
@@ -174,9 +171,8 @@ def replace_objectprop_b2_ind(client_id, reference_name, objectprop_name, ind_na
         individual. Only the specified instance will be replaced.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
-                           [objectprop_name, ind_name, new_value, old_value])
+        res = client.call(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
+                          [objectprop_name, ind_name, new_value, old_value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % (objectprop_name, ind_name)
@@ -227,9 +223,8 @@ def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, 
         property in the ontology is expecting a different specific value type.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        res = Client.ARMOR_CLIENT(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
-                           [dataprop_name, ind_name, value_type, new_value, old_value])
+        res = client.call(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
+                          [dataprop_name, ind_name, value_type, new_value, old_value])
 
     except rospy.ServiceException, e:
         err_msg = "Service call failed upon adding property %s to individual %s." % (dataprop_name, ind_name)
@@ -281,8 +276,7 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
         property in the ontology is expecting a different specific value type.
     """
     try:
-        rospy.wait_for_service(Client.ARMOR_CLIENT_NAME)
-        query = query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name)
+        query = client.call(client_id, reference_name, dataprop_name, ind_name)
 
         assert len(query) <= 1
         old_value = query[0] if len(query) == 1 else None
