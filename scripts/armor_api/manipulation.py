@@ -276,7 +276,7 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
         property in the ontology is expecting a different specific value type.
     """
     try:
-        query = client.call(client_id, reference_name, dataprop_name, ind_name)
+        query = query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name)
 
         assert len(query) <= 1
         old_value = query[0] if len(query) == 1 else None
