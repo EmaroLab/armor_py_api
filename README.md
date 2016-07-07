@@ -25,3 +25,9 @@ project, you have to add armor_py_api/scripts/armor_api as a source folder.
 In PyCharm you can add a folder as a source in the menu:
 
 **Settings...-> Project: your_project_name-> Project Structure**.
+
+**Note:** if your workspace is corrrectly set, installing ArmorPy is enough to
+use it in your code and run it. Thus, even if your IDE cannot find your imports,
+your code will work (it should find an **\_\_init\_\_.py** file only). Adding sources
+will allow you to see ArmorPy code for quick reference, easier debugging and 
+getting rid of annoying warnings.
