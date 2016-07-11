@@ -19,7 +19,7 @@ __status__ = "Development"
 
 name = 'armor_interface_srv'
 handle = rospy.ServiceProxy(name, ArmorDirective)
-timeout = None
+timeout = 5
 
 
 def call(client_id, reference_name, first_dir, second_dir, third_dir, args_list):

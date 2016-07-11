@@ -36,17 +36,17 @@ def query_ind_b2_class(client_id, reference_name, class_name):
     try:
         res = client.call(client_id, reference_name, 'QUERY', 'IND', 'CLASS', [class_name])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon querying individuals belonging to class %s" % class_name
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed upon querying individuals belonging to class {0}".format(class_name))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.queried_objects
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
@@ -65,17 +65,17 @@ def query_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name):
     try:
         res = client.call(client_id, reference_name, 'QUERY', 'DATAPROP', 'IND', [dataprop_name, ind_name])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon querying property %s to individual %s." % (dataprop_name, ind_name)
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed upon querying property {0} to individual {1}.".format(dataprop_name, ind_name))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.queried_objects
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def check_ind_exists(client_id, reference_name, ind_name):
@@ -97,11 +97,10 @@ def check_ind_exists(client_id, reference_name, ind_name):
     try:
         query = query_ind_b2_class(client_id, reference_name, 'Thing')
 
-    except rospy.ServiceException, e:
-        err_msgs = "Service call failed upon querying %s from %s" % (reference_name, client_id)
-        raise ArmorServiceCallError(err_msgs)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError("Service call failed upon querying {0} from {1}".format(reference_name, client_id))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if ind_name in query:

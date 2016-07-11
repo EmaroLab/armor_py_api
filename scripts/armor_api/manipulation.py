@@ -44,16 +44,16 @@ def add_ind_to_class(client_id, reference_name, ind_name, class_name):
         res = client.call(client_id, reference_name, 'ADD', 'IND', 'CLASS', [ind_name, class_name])
 
     except rospy.ServiceException, e:
-        err_msg = "Service call failed upon adding individual %s to class %s: %s" % (ind_name, class_name, e)
-        raise ArmorServiceCallError(err_msg)
+        raise ArmorServiceCallError(
+            "Service call failed upon adding individual {0} to class {1}: {2}".format(ind_name, class_name, e))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.is_consistent
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, value_obj_name):
@@ -82,17 +82,17 @@ def add_objectprop_to_ind(client_id, reference_name, objectprop_name, ind_name, 
         res = client.call(client_id, reference_name, 'ADD', 'OBJECTPROP', 'IND',
                           [objectprop_name, ind_name, value_obj_name])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon adding property %s to individual %s." % (objectprop_name, ind_name)
+    except rospy.ServiceException:
+        err_msg = "Service call failed upon adding property {0} to individual {1}.".format(objectprop_name, ind_name)
         raise ArmorServiceCallError(err_msg)
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.is_consistent
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, value_type, value):
@@ -129,17 +129,17 @@ def add_dataprop_to_ind(client_id, reference_name, dataprop_name, ind_name, valu
         res = client.call(client_id, reference_name, 'ADD', 'DATAPROP', 'IND',
                           [dataprop_name, ind_name, value_type, value])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon adding property %s to individual %s." % (dataprop_name, ind_name)
+    except rospy.ServiceException:
+        err_msg = "Service call failed upon adding property {0} to individual {1}.".format(dataprop_name, ind_name)
         raise ArmorServiceCallError(err_msg)
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.is_consistent
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def replace_objectprop_b2_ind(client_id, reference_name, objectprop_name, ind_name, new_value, old_value):
@@ -174,17 +174,17 @@ def replace_objectprop_b2_ind(client_id, reference_name, objectprop_name, ind_na
         res = client.call(client_id, reference_name, 'REPLACE', 'OBJECTPROP', 'IND',
                           [objectprop_name, ind_name, new_value, old_value])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon adding property %s to individual %s." % (objectprop_name, ind_name)
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed upon adding property {0} to individual {1}.".format(objectprop_name, ind_name))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.is_consistent
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, value_type, new_value, old_value):
@@ -226,17 +226,17 @@ def replace_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, 
         res = client.call(client_id, reference_name, 'REPLACE', 'DATAPROP', 'IND',
                           [dataprop_name, ind_name, value_type, new_value, old_value])
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon adding property %s to individual %s." % (dataprop_name, ind_name)
+    except rospy.ServiceException:
+        err_msg = "Service call failed upon adding property {0} to individual {1}.".format(dataprop_name, ind_name)
         raise ArmorServiceCallError(err_msg)
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
-    if not res.success:
-        raise ArmorServiceInternalError(res.error_description, res.exit_code)
-    else:
+    if res.success:
         return res.is_consistent
+    else:
+        raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
 
 def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_name, value_type, new_value):
@@ -287,17 +287,18 @@ def replace_one_dataprop_b2_ind(client_id, reference_name, dataprop_name, ind_na
             res = replace_dataprop_b2_ind(
                 client_id, reference_name, dataprop_name, ind_name, value_type, new_value, old_value)
 
-    except AssertionError, e:
-        err_msg = "You are trying to replace a single value of %s belonging to %s " \
+    except AssertionError:
+        err_msg = "You are trying to replace a single value of {} belonging to {} " \
                   "but multiple values were found. Check your ontology and the " \
-                  "way you add data properties too your individuals." % (dataprop_name, ind_name)
+                  "way you add data properties too your individuals.".format(dataprop_name, ind_name)
         raise ArmorServiceInternalError(err_msg, "206")
 
-    except rospy.ServiceException, e:
-        err_msg = "Failed to replace single value of data property %s belonging to %s." % (dataprop_name, ind_name)
+    except rospy.ServiceException:
+        err_msg = \
+            "Failed to replace single value of data property {0} belonging to {1}.".format(dataprop_name, ind_name)
         raise ArmorServiceCallError(err_msg)
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     return res

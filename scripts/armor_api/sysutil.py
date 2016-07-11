@@ -38,14 +38,15 @@ def apply_buffered_changes(client_id, reference_name):
     """
     try:
         res = client.call(client_id, reference_name, 'APPLY', '', '', [])
-        rospy.loginfo("%sBuffered manipulations to %s applied.%s",
-                      __TermColors.OKGREEN, reference_name, __TermColors.ENDC)
+        rospy.loginfo(
+            "{0}Buffered manipulations to {1} applied.{2}"
+            .format(__TermColors.OKGREEN, reference_name, __TermColors.ENDC))
 
     except rospy.ServiceException, e:
-        err_msg = "Armor service internal error. Buffered changes have not been applied. Exception: %s" % e
-        raise ArmorServiceCallError(err_msg)
+        raise ArmorServiceCallError(
+            "Armor service internal error. Buffered changes have not been applied. Exception: {0}".format(e))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if res.success:
@@ -71,14 +72,13 @@ def sync_buffered_reasoner(client_id, reference_name):
     """
     try:
         res = client.call(client_id, reference_name, 'REASON', '', '', [])
-        rospy.loginfo("%sReasoner synced on %s applied.%s",
-                      __TermColors.OKGREEN, reference_name, __TermColors.ENDC)
+        rospy.loginfo(
+            "{0}Reasoner synced on {1} applied.{2}".format(__TermColors.OKGREEN, reference_name, __TermColors.ENDC))
         
-    except rospy.ServiceException, e:
-        err_msg = "Armor service internal error. Buffered reasoner could not be synced."
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError("Armor service internal error. Buffered reasoner could not be synced.")
     
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
     
     if res.success:
@@ -105,14 +105,15 @@ def save_ref_with_inferences(client_id, reference_name, filepath):
     """
     try:
         res = client.call(client_id, reference_name, 'SAVE', 'INFERENCE', '', [filepath])
-        rospy.loginfo("%sReference %s saved to %s.%s",
-                      __TermColors.OKGREEN, reference_name, filepath, __TermColors.ENDC)
+        rospy.loginfo(
+            "{0}Reference {1} saved to {2}.{3}"
+            .format(__TermColors.OKGREEN, reference_name, filepath, __TermColors.ENDC))
 
-    except rospy.ServiceException, e:
-        err_msg = "Armor service internal error. Cannot save reference %s to %s." % (reference_name, filepath)
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Armor service internal error. Cannot save reference {0} to {1}.".format(reference_name, filepath))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
@@ -146,11 +147,11 @@ def load_ref_from_file(client_id, reference_name, owl_file_path, iri,
             res = client.call(client_id, reference_name, 'LOAD', 'FILE', '',
                               [owl_file_path, iri, str(buffered_manipulation), reasoner, str(buffered_reasoner)])
 
-    except rospy.ServiceException, e:
-        err_msgs = "Service call failed upon reference %s from %s" % (reference_name, client_id)
-        raise ArmorServiceCallError(err_msgs)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed upon reference {0} from {1}".format(reference_name, client_id))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
@@ -171,13 +172,14 @@ def mount_on_ref(client_id, reference_name):
     """
     try:
         res = client.call(client_id, reference_name, 'MOUNT', '', '', [])
-        rospy.loginfo("%s%s mounted on %s.%s", __TermColors.WARNING, client_id, reference_name, __TermColors.ENDC)
+        rospy.loginfo(
+            "{0}{1} mounted on {2}.{3}".format(__TermColors.WARNING, client_id, reference_name, __TermColors.ENDC))
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed upon mounting %s on reference %s." % (client_id, reference_name)
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed upon mounting {0} on reference {1}.".format(client_id, reference_name))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
@@ -198,13 +200,14 @@ def unmount_from_ref(client_id, reference_name):
     """
     try:
         res = client.call(client_id, reference_name, 'UNMOUNT', '', '', [])
-        rospy.loginfo("%s%s unmounted from %s.%s", __TermColors.WARNING, client_id, reference_name, __TermColors.ENDC)
+        rospy.loginfo(
+            "{0}{1} unmounted from {2}.{3}".format(__TermColors.WARNING, client_id, reference_name, __TermColors.ENDC))
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed while unmounting %s from reference %s." % (client_id, reference_name)
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError(
+            "Service call failed while unmounting {0} from reference {1}.".format(client_id, reference_name))
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
@@ -227,13 +230,12 @@ def set_log_to_terminal(switch):
             res = client.call('', '', 'LOG', 'SCREEN', 'ON', [])
         else:
             res = client.call('', '', 'LOG', 'SCREEN', 'OFF', [])
-        rospy.loginfo("%sToggled log to terminal.%s", __TermColors.WARNING, __TermColors.ENDC)
+        rospy.loginfo("{0}Toggled log to terminal.{1}".format(__TermColors.WARNING, __TermColors.ENDC))
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed while toggling logger to terminal"
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError("Service call failed while toggling logger to terminal")
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
@@ -257,18 +259,17 @@ def set_log_to_file(switch, filepath=''):
             if filepath != '':
                 res = client.call('', '', 'LOG', 'FILE', 'ON', [filepath])
             else:
-                err_msg = "ARMOR_PY ERROR: please select a filepath to log to when you toggle on ARMOR logging to file."
-                raise ArmorServiceCallError(err_msg)
+                raise ArmorServiceCallError(
+                    "ARMOR_PY ERROR: please select a filepath to log to when you toggle on ARMOR logging to file.")
         else:
             res = client.call('', '', 'LOG', 'FILE', 'OFF', [])
 
-        rospy.loginfo("%sToggled log to file: %s.%s", __TermColors.WARNING, filepath, __TermColors.ENDC)
+        rospy.loginfo("{0}Toggled log to file: {1}.{2}".format(__TermColors.WARNING, filepath, __TermColors.ENDC))
 
-    except rospy.ServiceException, e:
-        err_msg = "Service call failed while toggling log to file."
-        raise ArmorServiceCallError(err_msg)
+    except rospy.ServiceException:
+        raise ArmorServiceCallError("Service call failed while toggling log to file.")
 
-    except rospy.ROSException, e:
+    except rospy.ROSException:
         raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
 
     if not res.success:
