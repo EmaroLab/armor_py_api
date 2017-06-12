@@ -1,7 +1,7 @@
-Exceptions module
+ArmorManipulation
 =================
 
-.. automodule:: armor_api.exceptions
+.. automodule:: armor_api.armor_manipulation_client
     :members:
     :undoc-members:
     :show-inheritance:

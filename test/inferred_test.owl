@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/emarolab/pyarmor/test#"
+     xml:base="http://www.semanticweb.org/emarolab/pyarmor/test"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#OProperty_1 -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#OProperty_1"/>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#OProperty_2 -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#OProperty_2"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#DProperty_1 -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#DProperty_1"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#Class_1 -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#Class_1"/>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#Class_2 -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#Class_2">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_1"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#Class_3 -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#Class_3"/>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#Class_4 -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#Class_4">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#OProperty_1"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_3"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#DProperty_1"/>
+                        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#ind_1 -->
+
+
+    <owl:Thing rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#ind_1">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_1"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_4"/>
+        <OProperty_1 rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#ind_3"/>
+        <OProperty_2 rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#ind_2"/>
+        <DProperty_1 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</DProperty_1>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#ind_2 -->
+
+
+    <owl:Thing rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#ind_2">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_1"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_2"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.semanticweb.org/emarolab/pyarmor/test#ind_3 -->
+
+
+    <owl:Thing rdf:about="http://www.semanticweb.org/emarolab/pyarmor/test#ind_3">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emarolab/pyarmor/test#Class_3"/>
+    </owl:Thing>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 5.0.5.20170104-0800) https://github.com/owlcs/owlapi/ -->
+
+

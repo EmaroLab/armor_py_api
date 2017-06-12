@@ -14,7 +14,7 @@ Also includes:
     + **Exceptions** - All exceptions armor_api commands can possibly raise.
 """
 
-from . import manipulation, query, sysutil, exceptions, client
+from . import armor_manipulation_client, armor_query_client, armor_utils_client, armor_exceptions, armor_client
 
 __author__ = "Alessio Capitanelli"
 __copyright__ = "Copyright 2016, ArmorPy"
@@ -24,5 +24,5 @@ __maintainer__ = "Alessio Capitanelli"
 __email__ = "alessio.capitanelli@dibris.unige.it"
 __status__ = "Development"
 
-__all__ = ['manipulation', 'query', 'sysutil', 'exceptions', 'client']
+__all__ = ['ArmorManipulationClient.py', 'ArmorQueryClient.py', 'ArmorUtilsClient.py', 'ArmorExceptions.py', 'ArmorClient.py']
 
