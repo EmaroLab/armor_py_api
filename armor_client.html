@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ArmorClient &mdash; ArmorPy 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ArmorPy 1.0.0 documentation" href="index.html"/>
+        <link rel="up" title="Armor Py module" href="armor_api.html"/>
+        <link rel="next" title="ArmorManipulation" href="armor_manipulation_client.html"/>
+        <link rel="prev" title="Armor Py module" href="armor_api.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArmorPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="armor_api.html">Armor Py module</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ArmorClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_manipulation_client.html">ArmorManipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_query_client.html">ArmorQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_utils_client.html">ArmorUtils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_exceptions.html">ArmorExceptions</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArmorPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="armor_api.html">Armor Py module</a> &raquo;</li>
+        
+      <li>ArmorClient</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/armor_client.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-armor_api.armor_client">
+<span id="armorclient"></span><h1>ArmorClient<a class="headerlink" href="#module-armor_api.armor_client" title="Permalink to this headline">¶</a></h1>
+<p>Python client manager class for Armor &#8211;ArmorPy.</p>
+<dl class="class">
+<dt id="armor_api.armor_client.ArmorClient">
+<em class="property">class </em><code class="descclassname">armor_api.armor_client.</code><code class="descname">ArmorClient</code><span class="sig-paren">(</span><em>client_id</em>, <em>reference_name</em>, <em>service_name='armor_interface_srv'</em>, <em>serial_service_name='armor_interface_serialized_srv'</em>, <em>timeout=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/armor_client.html#ArmorClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.armor_client.ArmorClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="armor_api.armor_client.ArmorClient.call">
+<code class="descname">call</code><span class="sig-paren">(</span><em>command</em>, <em>first_spec</em>, <em>second_spec</em>, <em>args_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/armor_api/armor_client.html#ArmorClient.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#armor_api.armor_client.ArmorClient.call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.client_id">
+<code class="descname">client_id</code><em class="property"> = None</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.client_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.manipulation">
+<code class="descname">manipulation</code><em class="property"> = None</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.manipulation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.query">
+<code class="descname">query</code><em class="property"> = None</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.reference_name">
+<code class="descname">reference_name</code><em class="property"> = None</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.reference_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.timeout">
+<code class="descname">timeout</code><em class="property"> = 0</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="armor_api.armor_client.ArmorClient.utils">
+<code class="descname">utils</code><em class="property"> = None</em><a class="headerlink" href="#armor_api.armor_client.ArmorClient.utils" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="armor_manipulation_client.html" class="btn btn-neutral float-right" title="ArmorManipulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="armor_api.html" class="btn btn-neutral" title="Armor Py module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Alessio Capitanelli.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

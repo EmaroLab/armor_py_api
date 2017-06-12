@@ -1,5 +1,5 @@
-Armor API module
-================
+Armor Py module
+===============
 
 .. automodule:: armor_api
     :members:
@@ -9,8 +9,10 @@ Armor API module
 .. toctree::
    :maxdepth: 2
 
-   manipulation
-   query
-   sysutil
+   armor_client
 
-   exceptions
+   armor_manipulation_client
+   armor_query_client
+   armor_utils_client
+
+   armor_exceptions

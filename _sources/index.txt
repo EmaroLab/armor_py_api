@@ -6,25 +6,40 @@
 ArmorPy  - Easy Ontology managament in ROS
 ==========================================
 
-**ArmorPy** is a wrapper library for **ARMOR** - *A ROS Multi Ontology Reference*
+**ArmorPy** is a client library for **ARMOR** - *A ROS Multi Ontology Reference*
 
-**ARMOR** is a service that can manage multiple ontologies in ROS, allowing you
-to query and manipulate ontologies from one or more clients, independently of the
-language they are coded in. In thi way you can keep all your semantic knowledge
-in a single location without giving up flexibility. You can also avoid writing a single
-code of Java.
+`ARMOR <https://github.com/EmaroLab/armor>`_ is a service that can manage multiple ontologies in ROS, allowing you
+to query and manipulate ontologies from one or more clients. In this way you can keep all your semantic knowledge
+in a single location without giving up flexibility. Also, you can work with ontologies in any language supported by ROS.
 
-**ArmorPy** helps you speed up the development process of any node which is supposed to
-work with ARMOR:
+**ArmorPy** helps you quickly develop python clients for ARMOR:
 
-- No need to manually call ARMOR and compile the lengthy messages! Everything is done inside ArmorPy high-level functions.
+- No need to call ARMOR and manually fill the lengthy messages
 
-- Higher level utility functions for common operations actually performs multiple calls to ARMOR and returns the desired results, keeping your code clean and tidy.
+- Monitors ARMOR service state and calls' responses for steady fault recovery
 
-- Monitors ARMOR results and service state for steady fault recovery.
+- Useful macros
 
+To use the library, simply initialize a client with a ID and a reference to work with:
 
-**Check it out!**
+.. code-block:: python
+
+   client = ArmorClient(client_id, reference_name)
+
+Commands are sorted by their purpose (manipulation, query, utility).
+
+You can call the service functions in the following way:
+
+.. code-block:: python
+
+   client.manipulation.some_manipulation_command(args)
+   client.query.some_query_command(args)
+   client.utils.some_utils_command(args)
+
+That's it!
+
+ArmorPy currently supports only a fraction of ARMOR functions, but coverage will improve over time.
+If you are interested, please feel free to contribute to the project!
 
 .. toctree::
    :maxdepth: 2

@@ -13,6 +13,8 @@
 
   
   
+  
+  
 
   
 
@@ -31,7 +33,7 @@
 
   
     <link rel="top" title="ArmorPy 1.0.0 documentation" href="#"/>
-        <link rel="next" title="Armor API module" href="armor_api.html"/> 
+        <link rel="next" title="Armor Py module" href="armor_api.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -40,6 +42,7 @@
 
 <body class="wy-body-for-nav" role="document">
 
+   
   <div class="wy-grid-for-nav">
 
     
@@ -80,8 +83,11 @@
           
             
             
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor API module</a></li>
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor Py module</a></li>
 </ul>
 
             
@@ -94,8 +100,10 @@
 
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">ArmorPy</a>
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ArmorPy</a>
+        
       </nav>
 
 
@@ -104,23 +112,40 @@
         <div class="rst-content">
           
 
- 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 <div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>ArmorPy  - Easy Ontology managament in ROS</li>
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>ArmorPy  - Easy Ontology managament in ROS</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
         
-          
+            
             <a href="_sources/index.txt" rel="nofollow"> View page source</a>
           
         
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -128,27 +153,38 @@
             
   <div class="section" id="armorpy-easy-ontology-managament-in-ros">
 <h1>ArmorPy  - Easy Ontology managament in ROS<a class="headerlink" href="#armorpy-easy-ontology-managament-in-ros" title="Permalink to this headline">¶</a></h1>
-<p><strong>ArmorPy</strong> is a wrapper library for <strong>ARMOR</strong> - <em>A ROS Multi Ontology Reference</em></p>
-<p><strong>ARMOR</strong> is a service that can manage multiple ontologies in ROS, allowing you
-to query and manipulate ontologies from one or more clients, independently of the
-language they are coded in. In thi way you can keep all your semantic knowledge
-in a single location without giving up flexibility. You can also avoid writing a single
-code of Java.</p>
-<p><strong>ArmorPy</strong> helps you speed up the development process of any node which is supposed to
-work with ARMOR:</p>
+<p><strong>ArmorPy</strong> is a client library for <strong>ARMOR</strong> - <em>A ROS Multi Ontology Reference</em></p>
+<p><a class="reference external" href="https://github.com/EmaroLab/armor">ARMOR</a> is a service that can manage multiple ontologies in ROS, allowing you
+to query and manipulate ontologies from one or more clients. In this way you can keep all your semantic knowledge
+in a single location without giving up flexibility. Also, you can work with ontologies in any language supported by ROS.</p>
+<p><strong>ArmorPy</strong> helps you quickly develop python clients for ARMOR:</p>
 <ul class="simple">
-<li>No need to manually call ARMOR and compile the lengthy messages! Everything is done inside ArmorPy high-level functions.</li>
-<li>Higher level utility functions for common operations actually performs multiple calls to ARMOR and returns the desired results, keeping your code clean and tidy.</li>
-<li>Monitors ARMOR results and service state for steady fault recovery.</li>
+<li>No need to call ARMOR and manually fill the lengthy messages</li>
+<li>Monitors ARMOR service state and calls&#8217; responses for steady fault recovery</li>
+<li>Useful macros</li>
 </ul>
-<p><strong>Check it out!</strong></p>
+<p>To use the library, simply initialize a client with a ID and a reference to work with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">ArmorClient</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">reference_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Commands are sorted by their purpose (manipulation, query, utility).</p>
+<p>You can call the service functions in the following way:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">manipulation</span><span class="o">.</span><span class="n">some_manipulation_command</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">some_query_command</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">some_utils_command</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That&#8217;s it!</p>
+<p>ArmorPy currently supports only a fraction of ARMOR functions, but coverage will improve over time.
+If you are interested, please feel free to contribute to the project!</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor API module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="manipulation.html">Manipulation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="query.html">Query module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sysutil.html">Sysutil module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="armor_api.html">Armor Py module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="armor_client.html">ArmorClient</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_manipulation_client.html">ArmorManipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_query_client.html">ArmorQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_utils_client.html">ArmorUtils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="armor_exceptions.html">ArmorExceptions</a></li>
 </ul>
 </li>
 </ul>
@@ -165,12 +201,15 @@ work with ARMOR:</p>
 
 
            </div>
+           <div class="articleComments">
+            
+           </div>
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="armor_api.html" class="btn btn-neutral float-right" title="Armor API module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="armor_api.html" class="btn btn-neutral float-right" title="Armor Py module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -205,7 +244,8 @@ work with ARMOR:</p>
             VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>
