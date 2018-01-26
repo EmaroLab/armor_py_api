@@ -3,7 +3,7 @@ System utility commands for Armor Python API --ArmorPy.
 """
 
 import rospy
-from armor_api.exceptions import ArmorServiceCallError, ArmorServiceInternalError
+from armor_api.armor_exceptions import ArmorServiceCallError, ArmorServiceInternalError
 
 __author__ = "Alessio Capitanelli"
 __copyright__ = "Copyright 2016, ArmorPy"
