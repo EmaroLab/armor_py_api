@@ -92,7 +92,7 @@ class ArmorQueryClient(object):
             armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error.
         """
         try:
-            query = self.ind_b2_class('Thing')
+            res = self._client.call('QUERY', 'IND', '', [ind_name])
     
         except rospy.ServiceException:
             raise ArmorServiceCallError("Service call failed upon querying {0} from {1}".format(
@@ -101,8 +101,5 @@ class ArmorQueryClient(object):
         except rospy.ROSException:
             raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
     
-        if ind_name in query:
-            return True
-        else:
-            return False
+        return res.success
     

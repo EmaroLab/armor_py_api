@@ -47,8 +47,7 @@ client.manipulation.replace_dataprop_b2_ind("DProperty_1", "ind_1", "INTEGER", "
 client.utils.apply_buffered_changes()
 client.utils.sync_buffered_reasoner()
 
-client.query.check_ind_exists("ind_1")
-if len(client.query.ind_b2_class("Class_4")) == 1:
+if client.query.check_ind_exists("ind_1"):
     print "Success! ind_1 is in Class_4 now!"
 
 # SAVE AND EXIT
