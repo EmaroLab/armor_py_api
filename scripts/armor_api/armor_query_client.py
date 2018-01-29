@@ -100,6 +100,9 @@ class ArmorQueryClient(object):
     
         except rospy.ROSException:
             raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
-    
-        return res.success
+
+        if res.success and res.queried_objects > 1:
+            return True
+        else:
+            return False
     
