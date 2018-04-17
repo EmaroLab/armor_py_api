@@ -21,7 +21,7 @@ ArmorPy installs itself into the */devel/bin* of your workspace as you run
 
 To use it, import from 'armor_api':
 
-  from armor_api.armor_client import ArmorClient
+    from armor_api.armor_client import ArmorClient
 
 If your IDE cannot find the ArmorPy sources when working on a different 
 project, you have to add armor_py_api/scripts/armor_api as a source folder.
