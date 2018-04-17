@@ -133,6 +133,38 @@ class ArmorManipulationClient(object):
             return res.is_consistent
         else:
             raise ArmorServiceInternalError(res.error_description, res.exit_code)
+            
+    def add_batch_dataprop_to_ind(self, ind_name, dataprops):
+        """
+        Add multiple dataprops to a single individual. Properties are passed as list of list, 
+        each element of the root list correspond to a property to add.
+    
+        Args:
+            ind_name (str): individual to assign the data property value.
+            dataprops: list of [prop_name, value_type, value] objects
+    
+        Returns:
+            bool: True if ontology is consistent and every call succeeds,
+                  returns False on the first failed call
+    
+        Raises:
+            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
+            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
+    
+        Note:
+            It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+            if you are working in buffered reasoner or manipulation mode!
+    
+        Note:
+            If *value_type* and *value* does not match, *ArmorServiceInternalError* may be risen or you may break your 
+            ontology consistency. Consistency can break even if you send a proper request but the ontology is expecting 
+            a different value type.
+    
+        """
+        for prop in dataprops:
+          if not add_dataprop_to_ind(prop[0], ind_name, prop[1], prop[2]):
+            return False
+        return True
 
     def replace_objectprop_b2_ind(self, objectprop_name, ind_name, new_value, old_value):
         """
