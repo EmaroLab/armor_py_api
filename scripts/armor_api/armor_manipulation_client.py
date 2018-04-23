@@ -162,7 +162,7 @@ class ArmorManipulationClient(object):
     
         """
         for prop in dataprops:
-          if not add_dataprop_to_ind(prop[0], ind_name, prop[1], prop[2]):
+          if not self.add_dataprop_to_ind(prop[0], ind_name, prop[1], prop[2]):
             return False
         return True
 
