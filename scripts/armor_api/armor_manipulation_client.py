@@ -315,3 +315,111 @@ class ArmorManipulationClient(object):
             raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
     
         return res
+
+     def remove_dataprop_from_ind(self, ind_name,dataprop_name,value_type,value):
+        """
+                Remove a data property to an individual.
+
+        Args:
+            dataprop_name (str): name of the data property to remove.
+            ind_name (str): individual from which to remove the desired data property value.
+            value_type (str): type of the value to remove (INTEGER, INT, FLOAT, LONG, DOUBLE, STRING, BOOLEAN, BOOL).
+            value (str): value as a string.
+
+        Returns:
+            bool: True if ontology is consistent, else False
+
+        Raises:
+            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
+            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
+
+        Note:
+            It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+            if you are working in buffered reasoner or manipulation mode!
+
+        Note:
+            If *value_type* and *value* does not match, *ArmorServiceInternalError* may be risen or you may break your
+            ontology consistency. Consistency can break even if you send a proper request but the ontology is expecting
+            a different value type.
+        """
+        try:
+            res = self._client.call('REMOVE', 'DATAPROP', 'IND', [dataprop_name,ind_name,value_type,value])
+
+        except rospy.ServiceException, e:
+            raise ArmorServiceCallError(
+                "Service call failed upon removing dataproperty {0} to individual {1}: {2}".format(dataprop_name,ind_name, e))
+
+        except rospy.ROSException:
+            raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
+        if res.success:
+            return res.is_consistent
+        else:
+            raise ArmorServiceInternalError(res.error_description, res.exit_code)
+
+    def remove_batch_dataprop_to_ind(self, ind_name, dataprops):
+        """
+        Remove multiple data properties from a single individual. Properties are passed as list of list,
+        each element of the root list correspond to a property to remove.
+
+        Args:
+            ind_name (str): individual from which to remove the data properties values.
+            dataprops: list of [prop_name, value_type, value] objects
+
+        Returns:
+            bool: True if ontology is consistent and every call succeeds,
+                  returns False on the first failed call
+
+        Raises:
+            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
+            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
+
+        Note:
+            It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+            if you are working in buffered reasoner or manipulation mode!
+
+        Note:
+            If *value_type* and *value* does not match, *ArmorServiceInternalError* may be risen or you may break your
+            ontology consistency. Consistency can break even if you send a proper request but the ontology is expecting
+            a different value type.
+
+        """
+        for prop in dataprops:
+            if not self.remove_dataprop_from_ind( ind_name,prop[0], prop[1], prop[2]):
+                return False
+        return True
+
+
+    def remove_ind_from_class(self, ind_name, class_name):
+        """
+        Remove an individual from a class.
+
+        Args:
+            ind_name (str): individual to be removed from the class.
+            class_name (str): individual will be removed to this class. 
+
+        Returns:
+            bool: True if ontology is consistent, else False
+
+        Raises:
+            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
+            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
+
+        Note:
+            It returns the boolean consistency state of the ontology. This value is not updated to the last operation
+            if you are working in buffered reasoner or manipulation mode!
+        """
+        try:
+            res = self._client.call('REMOVE', 'IND','CLASS', [ind_name,class_name])
+
+        except rospy.ServiceException, e:
+            raise ArmorServiceCallError(
+                "Service call failed upon adding individual {0}: {1}".format(ind_name, e))
+
+        except rospy.ROSException:
+            raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+
+        if res.success:
+            return res.is_consistent
+        else:
+            raise ArmorServiceInternalError(res.error_description, res.exit_code)
