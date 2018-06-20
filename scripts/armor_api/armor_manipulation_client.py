@@ -316,7 +316,7 @@ class ArmorManipulationClient(object):
     
         return res
 
-     def remove_dataprop_from_ind(self, ind_name,dataprop_name,value_type,value):
+    def remove_dataprop_from_ind(self, ind_name,dataprop_name,value_type,value):
         """
                 Remove a data property to an individual.
 
