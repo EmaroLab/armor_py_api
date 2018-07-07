@@ -11,6 +11,14 @@
   <url type="website">https://github.com/EmaroLab</url>
 
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>armor</build_depend>
+  <build_depend>armor_msgs</build_depend>
+  <build_depend>multi_ontology_reference</build_depend>
+  <build_depend>rospy</build_depend>
+  <run_depend>armor</run_depend>
+  <run_depend>armor_msgs</run_depend>
+  <run_depend>multi_ontology_reference</run_depend>
+  <run_depend>rospy</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -6,7 +6,10 @@ project(armor_py_api)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED
 	rospy
-	)
+	armor
+    armor_msgs
+    multi_ontology_reference
+  	)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)

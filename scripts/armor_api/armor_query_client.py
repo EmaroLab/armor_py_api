@@ -56,7 +56,7 @@ class ArmorQueryClient(object):
         Query all values of a data property associated with an individual.
     
         Args:
-            dataprop_name (str): data property whose value you want to query.
+            dataprop_name (str): data property whose values you want to query.
             ind_name (str): individual whose value you want to query.
     
         Returns:
@@ -68,6 +68,32 @@ class ArmorQueryClient(object):
         except rospy.ServiceException:
             raise ArmorServiceCallError(
                 "Service call failed upon querying property {0} to individual {1}.".format(dataprop_name, ind_name))
+    
+        except rospy.ROSException:
+            raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
+    
+        if res.success:
+            return res.queried_objects
+        else:
+            raise ArmorServiceInternalError(res.error_description, res.exit_code)
+            
+    def objectprop_b2_ind(self, objectprop_name, ind_name):
+        """
+        Query all object values of an object property associated with an individual.
+    
+        Args:
+            objectprop_name (str): object property whose values you want to query.
+            ind_name (str): individual whose value you want to query.
+    
+        Returns:
+            list(str): list of queried values as strings.
+        """
+        try:
+            res = self._client.call('QUERY', 'OBJECTPROP', 'IND', [objectprop_name, ind_name])
+    
+        except rospy.ServiceException:
+            raise ArmorServiceCallError(
+                "Service call failed upon querying property {0} to individual {1}.".format(objectprop_name, ind_name))
     
         except rospy.ROSException:
             raise ArmorServiceCallError("Cannot reach ARMOR client: Timeout Expired. Check if ARMOR is running.")
