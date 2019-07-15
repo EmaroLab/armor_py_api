@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 System utility commands for Armor Python API --ArmorPy.
 """

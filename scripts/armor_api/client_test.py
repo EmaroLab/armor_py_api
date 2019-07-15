@@ -1,19 +1,6 @@
 #! /usr/bin/env python
-
-"""
-A simple test script that loads an ontology and performs few operations.
-"""
-
 from armor_client import ArmorClient
 from os.path import dirname, realpath
-
-__author__ = "Alessio Capitanelli"
-__copyright__ = "Copyright 2016, ArmorPy"
-__license__ = "GNU"
-__version__ = "1.0.0"
-__maintainer__ = "Alessio Capitanelli"
-__email__ = "alessio.capitanelli@dibris.unige.it"
-__status__ = "Development"
 
 # INITIALIZE REFERENCE
 

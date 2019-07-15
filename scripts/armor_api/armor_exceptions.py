@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Exceptions raised by Armor Python API --ArmorPy
 """

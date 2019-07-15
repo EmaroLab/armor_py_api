@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Manipulation commands for Armor Python API --ArmorPy.
 """

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Python client manager class for Armor --ArmorPy.
 """

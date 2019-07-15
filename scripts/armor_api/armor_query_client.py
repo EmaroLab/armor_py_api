@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Querying commands for Armor Python API --ArmorPy.
 """

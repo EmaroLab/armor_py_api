@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 The **ArmorPy** armor_api module.
 
