@@ -109,8 +109,27 @@ class ArmorUtilsClient(object):
             armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
             armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
         """
+        self.save(filepath, true)
+            
+    def save(self, filepath, inference=false):
+        """
+        Save ontology
+    
+        Args:
+            filepath (str):
+    
+        Returns:
+            None:
+    
+        Raises:
+            armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
+            armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
+        """
         try:
-            res = self._client.call('SAVE', 'INFERENCE', '', [filepath])
+            if inference:
+                res = self._client.call('SAVE', 'INFERENCE', '', [filepath])            
+            else:
+                res = self._client.call('SAVE', '', '', [filepath])
             rospy.loginfo(
                 "{0}Reference {1} saved to {2}.{3}"
                 .format(self.__TermColors.OKGREEN, self._client.reference_name, filepath, self.__TermColors.ENDC))
@@ -125,6 +144,7 @@ class ArmorUtilsClient(object):
 
         if not res.success:
             raise ArmorServiceInternalError(res.error_description, res.exit_code)
+
 
     def load_ref_from_file(self, owl_file_path, iri,
                            buffered_manipulation=False, reasoner="PELLET", buffered_reasoner=False, mounted=False):
