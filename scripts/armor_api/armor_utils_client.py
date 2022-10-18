@@ -109,9 +109,9 @@ class ArmorUtilsClient(object):
             armor_api.exceptions.ArmorServiceCallError: if call to ARMOR fails
             armor_api.exceptions.ArmorServiceInternalError: if ARMOR reports an internal error
         """
-        self.save(filepath, true)
+        self.save(filepath, True)
             
-    def save(self, filepath, inference=false):
+    def save(self, filepath, inference=False):
         """
         Save ontology
     
