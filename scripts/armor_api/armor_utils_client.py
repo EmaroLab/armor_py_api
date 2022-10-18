@@ -55,7 +55,7 @@ class ArmorUtilsClient(object):
                 "{0}Buffered manipulations to {1} applied.{2}"
                 .format(self.__TermColors.OKGREEN, self._client.reference_name, self.__TermColors.ENDC))
 
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             raise ArmorServiceCallError(
                 "Armor service internal error. Buffered changes have not been applied. Exception: {0}".format(e))
 

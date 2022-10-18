@@ -16,11 +16,11 @@ client.utils.set_log_to_terminal(True)
 # ADD SOME AXIOMS
 
 client.manipulation.add_ind_to_class("ind_1", "Class_1")
-print "Added ind_1 to Class_1"
+print("Added ind_1 to Class_1")
 client.manipulation.add_ind_to_class("ind_2", "Class_2")
-print "Added ind_2 to Class_2"
+print("Added ind_2 to Class_2")
 client.manipulation.add_ind_to_class("ind_3", "Class_3")
-print "Added ind_3 to Class_3"
+print("Added ind_3 to Class_3")
 
 client.manipulation.add_objectprop_to_ind("OProperty_1", "ind_1", "ind_3")
 client.manipulation.add_objectprop_to_ind("OProperty_2", "ind_1", "ind_2")
@@ -35,7 +35,7 @@ client.utils.apply_buffered_changes()
 client.utils.sync_buffered_reasoner()
 
 if client.query.check_ind_exists("ind_1"):
-    print "Success! ind_1 is in Class_4 now!"
+    print("Success! ind_1 is in Class_4 now!")
 
 # SAVE AND EXIT
 
