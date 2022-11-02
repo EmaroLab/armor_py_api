@@ -35,3 +35,10 @@ use it in your code and run it. Thus, even if your IDE cannot find your imports,
 your code will work (it should find an **\_\_init\_\_.py** file only). Adding sources
 will allow you to see ArmorPy code for quick reference, easier debugging and 
 getting rid of annoying warnings.
+
+**Note2:** for new versions of ross (e.g., Noetic) you might need to add in
+your `.bashrc` file 
+```bash
+export PYTHONPATH=$PYTHONPATH:<path/to/armor_py_api>/scripts/armor_api/
+```
+Where `<path/to/armor_py_api>` should match with you actual installation path.
