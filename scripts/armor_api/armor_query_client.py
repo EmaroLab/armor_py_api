@@ -85,19 +85,24 @@ class ArmorQueryClient(object):
         else:
             raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
-    def objectprop_b2_ind(self, objectprop_name, ind_name):
+    def objectprop_b2_ind(self, objectprop_name, ind_name, with_URI = False):
         """
         Query all object values of an object property associated with an individual.
 
         Args:
             objectprop_name (str): object property whose values you want to query.
             ind_name (str): individual whose value you want to query.
+            with_URI (bool): False to get shortened name, True to get full name including URI
 
         Returns:
             list(str): list of queried values as strings.
         """
         try:
             res = self._client.call('QUERY', 'OBJECTPROP', 'IND', [objectprop_name, ind_name])
+
+            if not with_URI:
+              for i in range(len(res.queried_objects)):
+                res.queried_objects[i] = self._strip_URI(res.queried_objects[i])
 
         except rospy.ServiceException:
             raise ArmorServiceCallError(
@@ -155,4 +160,5 @@ class ArmorQueryClient(object):
       """
 
       str = re.findall(r'#(.+?)>', full_name)
-      return str
+      # Because findall returns a list of all matches, but here we will only ever have one match
+      return str[0]
