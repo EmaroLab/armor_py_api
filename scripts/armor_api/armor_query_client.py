@@ -5,6 +5,7 @@ Querying commands for Armor Python API --ArmorPy.
 """
 
 import rospy
+import re
 from armor_api.armor_exceptions import ArmorServiceInternalError, ArmorServiceCallError
 
 __author__ = "Alessio Capitanelli"
@@ -24,12 +25,13 @@ class ArmorQueryClient(object):
     def __init__(self, client):
         self._client = client
 
-    def ind_b2_class(self, class_name):
+    def ind_b2_class(self, class_name, with_URI = False):
         """
         Query the list of all individuals belonging to a class.
 
         Args:
             class_name (str): a class in the ontology
+            with_URI (bool): False to get shortened name, True to get full name including URI
 
         Returns:
             list(str): the list of individual belonging to the class
@@ -40,6 +42,10 @@ class ArmorQueryClient(object):
         """
         try:
             res = self._client.call('QUERY', 'IND', 'CLASS', [class_name])
+
+            if not with_URI:
+              for i in range(len(res.queried_objects)):
+                res.queried_objects[i] = self._strip_URI(res.queried_objects[i])
 
         except rospy.ServiceException:
             raise ArmorServiceCallError(
@@ -79,19 +85,24 @@ class ArmorQueryClient(object):
         else:
             raise ArmorServiceInternalError(res.error_description, res.exit_code)
 
-    def objectprop_b2_ind(self, objectprop_name, ind_name):
+    def objectprop_b2_ind(self, objectprop_name, ind_name, with_URI = False):
         """
         Query all object values of an object property associated with an individual.
 
         Args:
             objectprop_name (str): object property whose values you want to query.
             ind_name (str): individual whose value you want to query.
+            with_URI (bool): False to get shortened name, True to get full name including URI
 
         Returns:
             list(str): list of queried values as strings.
         """
         try:
             res = self._client.call('QUERY', 'OBJECTPROP', 'IND', [objectprop_name, ind_name])
+
+            if not with_URI:
+              for i in range(len(res.queried_objects)):
+                res.queried_objects[i] = self._strip_URI(res.queried_objects[i])
 
         except rospy.ServiceException:
             raise ArmorServiceCallError(
@@ -133,3 +144,21 @@ class ArmorQueryClient(object):
             return True
         else:
             return False
+
+    def _strip_URI(self, full_name):
+      """
+      Internal function to strip the URI from the name of the individual.
+
+      Args:
+          full_name (str): the individual's full name
+
+      Returns:
+          short_name (str): the individual's shortened name
+
+      Example:
+          full_name = '<http://bnc/exp-rob-lab/2022-23#E>' becomes short_name = 'E'
+      """
+
+      str = re.findall(r'#(.+?)>', full_name)
+      # Because findall returns a list of all matches, but here we will only ever have one match
+      return str[0]
